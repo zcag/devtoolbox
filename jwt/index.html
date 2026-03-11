@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JWT Decoder — Decode and Inspect JSON Web Tokens Online</title>
+  <meta name="description" content="Free online JWT decoder. Paste a JSON Web Token to decode its header and payload, check expiration, and inspect claims. Runs in your browser — no data sent anywhere.">
+  <meta name="keywords" content="jwt decoder, jwt debugger, decode jwt, json web token decoder, jwt parser, jwt inspector">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/jwt/">
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:900px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}textarea,input[type="text"]{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.85rem;padding:.75rem;resize:vertical;outline:none}textarea:focus{border-color:var(--accent)}textarea{min-height:120px}.btn-row{display:flex;gap:.5rem;margin:.75rem 0;flex-wrap:wrap}button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}.output-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.5px;margin-top:.75rem}.status{font-size:.8rem;padding:.25rem 0}.status.ok{color:var(--green)}.status.err{color:var(--red)}footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}.info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}@media(max-width:720px){header{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ jwt</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>JWT Decoder</h1>
+    <p>Decode and inspect JSON Web Tokens. See header, payload, and expiration status instantly.</p>
+  </div>
+  <textarea id="jwt-input" placeholder="Paste a JWT token (eyJ...)..." style="min-height:100px"></textarea>
+  <div class="btn-row">
+    <button onclick="jwtDecode()">Decode</button>
+    <button class="secondary" onclick="copyOutput('jwt-output')">Copy Payload</button>
+    <button class="secondary" onclick="clearAll()">Clear</button>
+  </div>
+  <div id="jwt-status" class="status"></div>
+  <div class="output-label">Header</div>
+  <textarea id="jwt-header" readonly style="min-height:80px"></textarea>
+  <div class="output-label">Payload</div>
+  <textarea id="jwt-output" readonly style="min-height:200px"></textarea>
+
+  <div class="info">
+    <h2>What is a JWT?</h2>
+    <p>A JSON Web Token (JWT) is a compact, URL-safe token format used for securely transmitting information between parties. JWTs consist of three parts: a <strong>header</strong> (algorithm and token type), a <strong>payload</strong> (claims like user ID, expiration), and a <strong>signature</strong>.</p>
+    <p style="margin-top:.5rem">This tool decodes the header and payload — it does not verify the signature. Never paste production tokens containing sensitive data into online tools that send data to a server. This tool runs entirely in your browser.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+function jwtDecode(){try{const token=document.getElementById('jwt-input').value.trim();const parts=token.split('.');if(parts.length!==3)throw new Error('JWT must have 3 parts (header.payload.signature)');const header=JSON.parse(atob(parts[0].replace(/-/g,'+').replace(/_/g,'/')));const payload=JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));document.getElementById('jwt-header').value=JSON.stringify(header,null,2);document.getElementById('jwt-output').value=JSON.stringify(payload,null,2);let status='Decoded successfully';if(payload.exp){const exp=new Date(payload.exp*1000);const now=new Date();status+=exp<now?' — EXPIRED ('+exp.toISOString()+')':' — expires '+exp.toISOString()}document.getElementById('jwt-status').className='status ok';document.getElementById('jwt-status').textContent=status}catch(e){document.getElementById('jwt-status').className='status err';document.getElementById('jwt-status').textContent='Error: '+e.message;document.getElementById('jwt-header').value='';document.getElementById('jwt-output').value=''}}
+function clearAll(){document.getElementById('jwt-input').value='';document.getElementById('jwt-header').value='';document.getElementById('jwt-output').value='';document.getElementById('jwt-status').textContent=''}
+function copyOutput(id){const el=document.getElementById(id);if(el){navigator.clipboard.writeText(el.value||el.textContent).then(()=>{const btn=event.target;const orig=btn.textContent;btn.textContent='Copied!';setTimeout(()=>btn.textContent=orig,1000)})}}
+</script>
+</body>
+</html>

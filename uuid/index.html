@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UUID Generator — Generate Random UUIDs (v4) Online</title>
+  <meta name="description" content="Free online UUID v4 generator. Generate one or multiple random UUIDs instantly. Uses the browser's crypto API for true randomness. No data sent to any server.">
+  <meta name="keywords" content="uuid generator, uuid v4, generate uuid, random uuid, guid generator, unique id generator">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/uuid/">
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:900px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.85rem;padding:.75rem;resize:vertical;outline:none;min-height:200px}textarea:focus{border-color:var(--accent)}.btn-row{display:flex;gap:.5rem;margin:.75rem 0;flex-wrap:wrap}button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}.output-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.5px}footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}.info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}@media(max-width:720px){header{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ uuid</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>UUID Generator</h1>
+    <p>Generate cryptographically random UUID v4 identifiers. Uses <code>crypto.randomUUID()</code>.</p>
+  </div>
+  <div class="btn-row">
+    <button onclick="genUUID(1)">Generate 1</button>
+    <button class="secondary" onclick="genUUID(5)">Generate 5</button>
+    <button class="secondary" onclick="genUUID(10)">Generate 10</button>
+    <button class="secondary" onclick="genUUID(50)">Generate 50</button>
+    <button class="secondary" onclick="copyOutput('uuid-output')">Copy All</button>
+  </div>
+  <div class="output-label">Output</div>
+  <textarea id="uuid-output" readonly></textarea>
+
+  <div class="info">
+    <h2>What is a UUID?</h2>
+    <p>A UUID (Universally Unique Identifier) is a 128-bit identifier that is practically guaranteed to be unique across all systems. Version 4 UUIDs are randomly generated, with a theoretical collision probability so low it's considered impossible in practice.</p>
+    <p style="margin-top:.5rem">Format: <code>xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx</code> where <code>4</code> indicates version 4 and <code>y</code> is one of <code>8, 9, a, b</code>. Common uses: database primary keys, API request IDs, session tokens, distributed system identifiers.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+function genUUID(count){const uuids=[];for(let i=0;i<count;i++){uuids.push(crypto.randomUUID())}document.getElementById('uuid-output').value=uuids.join('\n')}
+function copyOutput(id){const el=document.getElementById(id);if(el){navigator.clipboard.writeText(el.value||el.textContent).then(()=>{const btn=event.target;const orig=btn.textContent;btn.textContent='Copied!';setTimeout(()=>btn.textContent=orig,1000)})}}
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Diff Checker — Compare Two Texts Online</title>
+  <meta name="description" content="Free online text diff tool. Compare two texts side by side and see additions, deletions, and unchanged lines highlighted. Runs entirely in your browser.">
+  <meta name="keywords" content="diff checker, text compare, text diff, compare two texts, online diff tool, code diff">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/diff/">
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:900px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.85rem;padding:.75rem;resize:vertical;outline:none;min-height:150px}textarea:focus{border-color:var(--accent)}.btn-row{display:flex;gap:.5rem;margin:.75rem 0;flex-wrap:wrap}button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}.output-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.5px;margin-top:.75rem}footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}.info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}#diff-output{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:.75rem;font-family:var(--font-mono);font-size:.85rem;min-height:150px;white-space:pre-wrap;overflow-x:auto}@media(max-width:720px){header{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ diff</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>Text Diff Checker</h1>
+    <p>Compare two texts and see exactly what changed — additions, deletions, and unchanged lines.</p>
+  </div>
+  <div class="output-label">Original</div>
+  <textarea id="diff-a" placeholder="Paste the original text here..."></textarea>
+  <div class="output-label">Modified</div>
+  <textarea id="diff-b" placeholder="Paste the modified text here..."></textarea>
+  <div class="btn-row">
+    <button onclick="runDiff()">Compare</button>
+    <button class="secondary" onclick="clearAll()">Clear</button>
+  </div>
+  <div class="output-label">Diff Result</div>
+  <div id="diff-output"></div>
+
+  <div class="info">
+    <h2>How the diff works</h2>
+    <p>This tool uses a Longest Common Subsequence (LCS) algorithm to compute the minimal set of changes between the two texts. Lines in <span style="color:var(--green)">green</span> were added, lines in <span style="color:var(--red)">red</span> were removed.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+function runDiff(){const a=document.getElementById('diff-a').value.split('\n');const b=document.getElementById('diff-b').value.split('\n');const output=document.getElementById('diff-output');const lcs=[];for(let i=0;i<=a.length;i++){lcs[i]=[];for(let j=0;j<=b.length;j++){if(i===0||j===0)lcs[i][j]=0;else if(a[i-1]===b[j-1])lcs[i][j]=lcs[i-1][j-1]+1;else lcs[i][j]=Math.max(lcs[i-1][j],lcs[i][j-1])}}const diff=[];let i=a.length,j=b.length;while(i>0||j>0){if(i>0&&j>0&&a[i-1]===b[j-1]){diff.unshift({type:' ',text:a[i-1]});i--;j--}else if(j>0&&(i===0||lcs[i][j-1]>=lcs[i-1][j])){diff.unshift({type:'+',text:b[j-1]});j--}else{diff.unshift({type:'-',text:a[i-1]});i--}}let html='';for(const line of diff){const escaped=line.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');if(line.type==='+')html+=`<span style="color:var(--green)">+ ${escaped}</span>\n`;else if(line.type==='-')html+=`<span style="color:var(--red)">- ${escaped}</span>\n`;else html+=`  ${escaped}\n`}output.innerHTML=html||'<span style="color:var(--text-muted)">No differences</span>'}
+function clearAll(){document.getElementById('diff-a').value='';document.getElementById('diff-b').value='';document.getElementById('diff-output').innerHTML=''}
+</script>
+</body>
+</html>

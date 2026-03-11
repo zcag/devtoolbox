@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regex Tester — Test Regular Expressions Online</title>
+  <meta name="description" content="Free online regex tester. Test regular expressions against your text with live match highlighting and capture group display. Runs in your browser using JavaScript RegExp.">
+  <meta name="keywords" content="regex tester, regex checker, regular expression tester, test regex online, regex debugger, regex validator">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/regex/">
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:900px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}textarea,input[type="text"]{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.85rem;padding:.75rem;resize:vertical;outline:none}textarea:focus,input[type="text"]:focus{border-color:var(--accent)}textarea{min-height:150px}.btn-row{display:flex;gap:.5rem;margin:.75rem 0;flex-wrap:wrap}button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}.output-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.5px}.status{font-size:.8rem;padding:.25rem 0}.status.ok{color:var(--green)}.status.err{color:var(--red)}footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}.info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}@media(max-width:720px){header{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ regex</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>Regex Tester</h1>
+    <p>Test regular expressions with match highlighting and capture group display. Uses JavaScript's RegExp engine.</p>
+  </div>
+  <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
+    <input type="text" id="regex-pattern" placeholder="Enter regex pattern (e.g. \d+)" style="flex:1">
+    <input type="text" id="regex-flags" placeholder="gi" style="width:60px;text-align:center">
+  </div>
+  <textarea id="regex-input" placeholder="Enter test string..."></textarea>
+  <div class="btn-row">
+    <button onclick="testRegex()">Test</button>
+    <button class="secondary" onclick="copyOutput('regex-output')">Copy Matches</button>
+    <button class="secondary" onclick="clearAll()">Clear</button>
+  </div>
+  <div id="regex-status" class="status"></div>
+  <div class="output-label">Matches</div>
+  <textarea id="regex-output" readonly style="min-height:120px"></textarea>
+
+  <div class="info">
+    <h2>Regex quick reference</h2>
+    <p><code>\d</code> digit, <code>\w</code> word char, <code>\s</code> whitespace, <code>.</code> any char, <code>^</code> start, <code>$</code> end</p>
+    <p><code>*</code> 0+, <code>+</code> 1+, <code>?</code> 0 or 1, <code>{n,m}</code> n to m times</p>
+    <p><code>(group)</code> capture group, <code>(?:group)</code> non-capturing, <code>(?&lt;name&gt;group)</code> named group</p>
+    <p style="margin-top:.5rem">Common flags: <code>g</code> global, <code>i</code> case-insensitive, <code>m</code> multiline, <code>s</code> dotAll</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+function testRegex(){const pattern=document.getElementById('regex-pattern').value;const flags=document.getElementById('regex-flags').value||'g';const input=document.getElementById('regex-input').value;try{const re=new RegExp(pattern,flags);const matches=[];let match;if(flags.includes('g')){while((match=re.exec(input))!==null){matches.push(`[${match.index}] "${match[0]}"`+(match.length>1?' groups: '+match.slice(1).map((g,i)=>`$${i+1}="${g}"`).join(', '):''));if(!match[0])re.lastIndex++}}else{match=re.exec(input);if(match){matches.push(`[${match.index}] "${match[0]}"`+(match.length>1?' groups: '+match.slice(1).map((g,i)=>`$${i+1}="${g}"`).join(', '):''))}}document.getElementById('regex-output').value=matches.length?matches.join('\n'):'No matches';document.getElementById('regex-status').className='status ok';document.getElementById('regex-status').textContent=matches.length+' match'+(matches.length!==1?'es':'')}catch(e){document.getElementById('regex-status').className='status err';document.getElementById('regex-status').textContent='Error: '+e.message;document.getElementById('regex-output').value=''}}
+function clearAll(){document.getElementById('regex-pattern').value='';document.getElementById('regex-flags').value='';document.getElementById('regex-input').value='';document.getElementById('regex-output').value='';document.getElementById('regex-status').textContent=''}
+function copyOutput(id){const el=document.getElementById(id);if(el){navigator.clipboard.writeText(el.value||el.textContent).then(()=>{const btn=event.target;const orig=btn.textContent;btn.textContent='Copied!';setTimeout(()=>btn.textContent=orig,1000)})}}
+</script>
+</body>
+</html>
