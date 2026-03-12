@@ -48,5 +48,6 @@ function timeAgo(d){const diff=(Date.now()-d.getTime())/1000;if(Math.abs(diff)<6
 function clearAll(){document.getElementById('ts-input').value='';document.getElementById('ts-output').value=''}
 function copyOutput(id){const el=document.getElementById(id);if(el){navigator.clipboard.writeText(el.value||el.textContent).then(()=>{const btn=event.target;const orig=btn.textContent;btn.textContent='Copied!';setTimeout(()=>btn.textContent=orig,1000)})}}
 </script>
+<script data-goatcounter="https://devtoolbox.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

@@ -45,5 +45,6 @@
 function runDiff(){const a=document.getElementById('diff-a').value.split('\n');const b=document.getElementById('diff-b').value.split('\n');const output=document.getElementById('diff-output');const lcs=[];for(let i=0;i<=a.length;i++){lcs[i]=[];for(let j=0;j<=b.length;j++){if(i===0||j===0)lcs[i][j]=0;else if(a[i-1]===b[j-1])lcs[i][j]=lcs[i-1][j-1]+1;else lcs[i][j]=Math.max(lcs[i-1][j],lcs[i][j-1])}}const diff=[];let i=a.length,j=b.length;while(i>0||j>0){if(i>0&&j>0&&a[i-1]===b[j-1]){diff.unshift({type:' ',text:a[i-1]});i--;j--}else if(j>0&&(i===0||lcs[i][j-1]>=lcs[i-1][j])){diff.unshift({type:'+',text:b[j-1]});j--}else{diff.unshift({type:'-',text:a[i-1]});i--}}let html='';for(const line of diff){const escaped=line.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');if(line.type==='+')html+=`<span style="color:var(--green)">+ ${escaped}</span>\n`;else if(line.type==='-')html+=`<span style="color:var(--red)">- ${escaped}</span>\n`;else html+=`  ${escaped}\n`}output.innerHTML=html||'<span style="color:var(--text-muted)">No differences</span>'}
 function clearAll(){document.getElementById('diff-a').value='';document.getElementById('diff-b').value='';document.getElementById('diff-output').innerHTML=''}
 </script>
+<script data-goatcounter="https://devtoolbox.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

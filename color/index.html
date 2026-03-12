@@ -50,5 +50,6 @@ function hslToRgb(h,s,l){h/=360;s/=100;l/=100;let r,g,b;if(s===0){r=g=b=l}else{c
 function clearAll(){document.getElementById('color-input').value='';document.getElementById('color-output').value='';document.getElementById('color-preview').style.background=''}
 function copyOutput(id){const el=document.getElementById(id);if(el){navigator.clipboard.writeText(el.value||el.textContent).then(()=>{const btn=event.target;const orig=btn.textContent;btn.textContent='Copied!';setTimeout(()=>btn.textContent=orig,1000)})}}
 </script>
+<script data-goatcounter="https://devtoolbox.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

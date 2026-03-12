@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chmod Calculator — Unix File Permission Calculator Online</title>
+  <meta name="description" content="Free chmod calculator. Convert between octal, symbolic, and human-readable Unix file permissions. Interactive checkboxes for owner, group, and others.">
+  <meta name="keywords" content="chmod calculator, file permissions, unix permissions, chmod command, octal permissions, symbolic permissions, linux permissions">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/chmod/">
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:900px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}.output-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.5px}footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}.info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}.perm-grid{display:grid;grid-template-columns:100px repeat(3,1fr);gap:0;margin:1.5rem 0;border:1px solid var(--border);border-radius:8px;overflow:hidden}.perm-grid .hdr{background:var(--surface);padding:.6rem .75rem;font-weight:600;font-size:.85rem;text-align:center;border-bottom:1px solid var(--border);border-right:1px solid var(--border)}.perm-grid .hdr:last-child{border-right:none}.perm-grid .row-label{background:var(--surface);padding:.6rem .75rem;font-size:.85rem;font-weight:500;display:flex;align-items:center;border-bottom:1px solid var(--border);border-right:1px solid var(--border)}.perm-grid .cell{display:flex;align-items:center;justify-content:center;padding:.6rem;border-bottom:1px solid var(--border);border-right:1px solid var(--border);transition:background .15s}.perm-grid .cell:nth-child(4n){border-right:none}.perm-grid .cell.on{background:rgba(88,166,255,.08)}.perm-grid .cell input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:var(--accent)}.perm-grid .last-row,.perm-grid .last-row~.cell{border-bottom:none}.special-grid{display:grid;grid-template-columns:100px repeat(3,1fr);gap:0;margin:0 0 1.5rem;border:1px solid var(--border);border-radius:8px;overflow:hidden}.special-grid .hdr{background:var(--surface);padding:.5rem .75rem;font-weight:600;font-size:.8rem;text-align:center;border-bottom:1px solid var(--border);border-right:1px solid var(--border)}.special-grid .hdr:last-child{border-right:none}.special-grid .row-label{background:var(--surface);padding:.5rem .75rem;font-size:.8rem;font-weight:500;display:flex;align-items:center;border-right:1px solid var(--border)}.special-grid .cell{display:flex;align-items:center;justify-content:center;padding:.5rem;border-right:1px solid var(--border)}.special-grid .cell:last-child{border-right:none}.special-grid .cell input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--green)}.results{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1.5rem 0}.result-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem}.result-card .label{font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}.result-card .value{font-family:var(--font-mono);font-size:1.2rem;color:var(--text);word-break:break-all}.result-card .copy-btn{margin-top:.5rem;font-size:.75rem;padding:.3rem .6rem}.octal-input{display:flex;align-items:center;gap:.75rem;margin:1.5rem 0}.octal-input label{font-size:.85rem;color:var(--text-muted);white-space:nowrap}.octal-input input{background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:1.1rem;padding:.5rem .75rem;width:120px;text-align:center;outline:none;letter-spacing:2px}.octal-input input:focus{border-color:var(--accent)}.presets{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0 1.5rem}.preset{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.4rem .8rem;cursor:pointer;font-size:.8rem;color:var(--text);transition:all .15s}.preset:hover{border-color:var(--accent);color:var(--accent)}.preset .num{font-family:var(--font-mono);font-weight:600}.preset .desc{color:var(--text-muted);margin-left:.3rem;font-size:.75rem}@media(max-width:720px){header{flex-direction:column;gap:.5rem}.results{grid-template-columns:1fr}.perm-grid,.special-grid{font-size:.8rem}.perm-grid .hdr,.perm-grid .row-label,.perm-grid .cell{padding:.5rem}.presets{gap:.35rem}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ chmod</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>Chmod Calculator</h1>
+    <p>Calculate Unix file permissions interactively. Toggle checkboxes or enter an octal value.</p>
+  </div>
+
+  <div class="output-label">Octal Input</div>
+  <div class="octal-input">
+    <label>chmod</label>
+    <input type="text" id="octal-in" maxlength="4" value="0755" placeholder="0755">
+    <label>filename</label>
+  </div>
+
+  <div class="output-label">Permission Matrix</div>
+  <div class="perm-grid">
+    <div class="hdr"></div>
+    <div class="hdr">Owner</div>
+    <div class="hdr">Group</div>
+    <div class="hdr">Others</div>
+    <div class="row-label">Read</div>
+    <div class="cell" id="cell-ur"><input type="checkbox" data-who="u" data-perm="r"></div>
+    <div class="cell" id="cell-gr"><input type="checkbox" data-who="g" data-perm="r"></div>
+    <div class="cell" id="cell-or"><input type="checkbox" data-who="o" data-perm="r"></div>
+    <div class="row-label">Write</div>
+    <div class="cell" id="cell-uw"><input type="checkbox" data-who="u" data-perm="w"></div>
+    <div class="cell" id="cell-gw"><input type="checkbox" data-who="g" data-perm="w"></div>
+    <div class="cell" id="cell-ow"><input type="checkbox" data-who="o" data-perm="w"></div>
+    <div class="row-label last-row">Execute</div>
+    <div class="cell" id="cell-ux"><input type="checkbox" data-who="u" data-perm="x"></div>
+    <div class="cell" id="cell-gx"><input type="checkbox" data-who="g" data-perm="x"></div>
+    <div class="cell" id="cell-ox"><input type="checkbox" data-who="o" data-perm="x"></div>
+  </div>
+
+  <div class="output-label">Special Permissions</div>
+  <div class="special-grid">
+    <div class="hdr"></div>
+    <div class="hdr">Setuid</div>
+    <div class="hdr">Setgid</div>
+    <div class="hdr">Sticky</div>
+    <div class="row-label">Enable</div>
+    <div class="cell"><input type="checkbox" id="sp-setuid" data-sp="setuid"></div>
+    <div class="cell"><input type="checkbox" id="sp-setgid" data-sp="setgid"></div>
+    <div class="cell"><input type="checkbox" id="sp-sticky" data-sp="sticky"></div>
+  </div>
+
+  <div class="output-label">Common Presets</div>
+  <div class="presets">
+    <div class="preset" onclick="applyPreset('0777')"><span class="num">777</span><span class="desc">rwx all</span></div>
+    <div class="preset" onclick="applyPreset('0755')"><span class="num">755</span><span class="desc">owner rwx, others rx</span></div>
+    <div class="preset" onclick="applyPreset('0644')"><span class="num">644</span><span class="desc">owner rw, others r</span></div>
+    <div class="preset" onclick="applyPreset('0600')"><span class="num">600</span><span class="desc">owner rw only</span></div>
+    <div class="preset" onclick="applyPreset('0444')"><span class="num">444</span><span class="desc">read-only all</span></div>
+    <div class="preset" onclick="applyPreset('0700')"><span class="num">700</span><span class="desc">owner only</span></div>
+    <div class="preset" onclick="applyPreset('0666')"><span class="num">666</span><span class="desc">rw all</span></div>
+    <div class="preset" onclick="applyPreset('4755')"><span class="num">4755</span><span class="desc">setuid</span></div>
+    <div class="preset" onclick="applyPreset('2755')"><span class="num">2755</span><span class="desc">setgid</span></div>
+    <div class="preset" onclick="applyPreset('1777')"><span class="num">1777</span><span class="desc">sticky (/tmp)</span></div>
+  </div>
+
+  <div class="output-label">Results</div>
+  <div class="results">
+    <div class="result-card">
+      <div class="label">Octal</div>
+      <div class="value" id="out-octal">0755</div>
+      <button class="copy-btn secondary" onclick="copyText('out-octal',this)">Copy</button>
+    </div>
+    <div class="result-card">
+      <div class="label">Symbolic</div>
+      <div class="value" id="out-symbolic">rwxr-xr-x</div>
+      <button class="copy-btn secondary" onclick="copyText('out-symbolic',this)">Copy</button>
+    </div>
+    <div class="result-card">
+      <div class="label">chmod Command</div>
+      <div class="value" id="out-command">chmod 0755 filename</div>
+      <button class="copy-btn secondary" onclick="copyText('out-command',this)">Copy</button>
+    </div>
+    <div class="result-card">
+      <div class="label">ls -l Style</div>
+      <div class="value" id="out-ls">-rwxr-xr-x</div>
+      <button class="copy-btn secondary" onclick="copyText('out-ls',this)">Copy</button>
+    </div>
+  </div>
+
+  <div class="info">
+    <h2>About chmod and Unix file permissions</h2>
+    <p>Every file on a Unix/Linux system has three permission groups: <strong>Owner</strong> (user who owns the file), <strong>Group</strong> (users in the file's group), and <strong>Others</strong> (everyone else). Each group can have <strong>Read (4)</strong>, <strong>Write (2)</strong>, and <strong>Execute (1)</strong> permissions.</p>
+    <p style="margin-top:.5rem">The octal notation sums these values per group. For example, <code>755</code> means owner has 7 (4+2+1 = rwx), group has 5 (4+1 = r-x), and others have 5 (r-x).</p>
+    <p style="margin-top:.5rem"><strong>Special permissions:</strong> Setuid (4) runs a file as its owner, Setgid (2) runs it as its group or inherits directory group, and the Sticky bit (1) restricts deletion in shared directories like <code>/tmp</code>. These form a fourth leading octal digit.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+(function(){
+  var checks=document.querySelectorAll('.perm-grid input[type=checkbox]');
+  var spChecks=document.querySelectorAll('.special-grid input[type=checkbox]');
+  var octalIn=document.getElementById('octal-in');
+  var permMap={r:4,w:2,x:1};
+  var whoOrder=['u','g','o'];
+  var permOrder=['r','w','x'];
+
+  function getCheck(who,perm){return document.querySelector('input[data-who="'+who+'"][data-perm="'+perm+'"]')}
+
+  function calcFromCheckboxes(){
+    var sp=0;
+    if(document.getElementById('sp-setuid').checked)sp+=4;
+    if(document.getElementById('sp-setgid').checked)sp+=2;
+    if(document.getElementById('sp-sticky').checked)sp+=1;
+    var digits=[sp];
+    for(var w=0;w<whoOrder.length;w++){
+      var val=0;
+      for(var p=0;p<permOrder.length;p++){
+        if(getCheck(whoOrder[w],permOrder[p]).checked)val+=permMap[permOrder[p]];
+      }
+      digits.push(val);
+    }
+    return digits;
+  }
+
+  function updateCells(){
+    checks.forEach(function(cb){
+      var cell=cb.parentElement;
+      if(cb.checked)cell.classList.add('on');
+      else cell.classList.remove('on');
+    });
+  }
+
+  function toSymbolic(digits){
+    var s='';
+    for(var i=1;i<=3;i++){
+      var d=digits[i];
+      s+=(d&4)?'r':'-';
+      s+=(d&2)?'w':'-';
+      var x=(d&1);
+      if(i===1&&(digits[0]&4))s+=x?'s':'S';
+      else if(i===2&&(digits[0]&2))s+=x?'s':'S';
+      else if(i===3&&(digits[0]&1))s+=x?'t':'T';
+      else s+=x?'x':'-';
+    }
+    return s;
+  }
+
+  function updateOutput(){
+    var digits=calcFromCheckboxes();
+    var octalStr=digits.join('');
+    var sym=toSymbolic(digits);
+    document.getElementById('out-octal').textContent=octalStr;
+    document.getElementById('out-symbolic').textContent=sym;
+    document.getElementById('out-command').textContent='chmod '+octalStr+' filename';
+    document.getElementById('out-ls').textContent='-'+sym;
+    octalIn.value=octalStr;
+    updateCells();
+  }
+
+  function setFromOctal(str){
+    str=str.replace(/[^0-7]/g,'');
+    while(str.length<3)str='0'+str;
+    if(str.length===3)str='0'+str;
+    if(str.length>4)str=str.slice(0,4);
+    var digits=str.split('').map(Number);
+    document.getElementById('sp-setuid').checked=!!(digits[0]&4);
+    document.getElementById('sp-setgid').checked=!!(digits[0]&2);
+    document.getElementById('sp-sticky').checked=!!(digits[0]&1);
+    for(var w=0;w<whoOrder.length;w++){
+      var d=digits[w+1];
+      for(var p=0;p<permOrder.length;p++){
+        getCheck(whoOrder[w],permOrder[p]).checked=!!(d&permMap[permOrder[p]]);
+      }
+    }
+    updateOutput();
+  }
+
+  checks.forEach(function(cb){cb.addEventListener('change',updateOutput)});
+  spChecks.forEach(function(cb){cb.addEventListener('change',updateOutput)});
+
+  octalIn.addEventListener('input',function(){
+    var v=octalIn.value.replace(/[^0-7]/g,'');
+    if(v.length>=3&&v.length<=4)setFromOctal(v);
+  });
+
+  window.applyPreset=function(val){
+    octalIn.value=val;
+    setFromOctal(val);
+  };
+
+  window.copyText=function(id,btn){
+    var text=document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(function(){
+      var orig=btn.textContent;
+      btn.textContent='Copied!';
+      setTimeout(function(){btn.textContent=orig},1000);
+    });
+  };
+
+  setFromOctal('0755');
+})();
+</script>
+<script data-goatcounter="https://devtoolbox.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

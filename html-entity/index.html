@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Entity Encoder &amp; Decoder — Encode/Decode HTML Special Characters</title>
+  <meta name="description" content="Free HTML entity encoder and decoder. Convert special characters to HTML entities and back. Supports named entities, numeric codes, and hex codes. Browser-based.">
+  <meta name="keywords" content="html entity encoder, html entity decoder, html special characters, html escape, encode html, decode html entities, html character codes">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/html-entity/">
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:960px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}.text-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.text-grid-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.5px}textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.85rem;padding:.75rem;resize:vertical;outline:none;min-height:180px}textarea:focus{border-color:var(--accent)}.btn-row{display:flex;gap:.5rem;margin:.75rem 0;flex-wrap:wrap;align-items:center}button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}.mode-group{display:flex;gap:0;margin-left:auto}.mode-group button{border-radius:0;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);font-size:.8rem;padding:.4rem .75rem}.mode-group button:first-child{border-radius:6px 0 0 6px}.mode-group button:last-child{border-radius:0 6px 6px 0}.mode-group button.active{background:var(--accent);color:#fff;border-color:var(--accent)}.mode-group button:hover:not(.active){border-color:var(--accent);color:var(--text)}.ref-section{margin-top:2.5rem}.ref-section h2{font-size:1.1rem;margin-bottom:1rem;color:var(--text)}.ref-table{width:100%;border-collapse:collapse;font-size:.85rem}.ref-table th{text-align:left;padding:.6rem .75rem;background:var(--surface);border:1px solid var(--border);color:var(--text-muted);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.5px}.ref-table td{padding:.5rem .75rem;border:1px solid var(--border);font-family:var(--font-mono);font-size:.8rem}.ref-table tr:hover td{background:var(--surface)}.ref-table td:nth-child(2){font-size:1.1rem;text-align:center}.ref-table td:last-child{font-family:var(--font-sans);color:var(--text-muted)}footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}.info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}@media(max-width:720px){header{flex-direction:column;gap:.5rem}.text-grid{grid-template-columns:1fr}.btn-row{flex-direction:column;align-items:stretch}.mode-group{margin-left:0}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ html-entity</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>HTML Entity Encoder &amp; Decoder</h1>
+    <p>Convert special characters to HTML entities and back. Supports named, numeric, and hex entity formats.</p>
+  </div>
+  <div class="text-grid">
+    <div>
+      <div class="text-grid-label">Input</div>
+      <textarea id="input" placeholder="Enter text with special characters or HTML entities..."></textarea>
+    </div>
+    <div>
+      <div class="text-grid-label">Output</div>
+      <textarea id="output" readonly placeholder="Result will appear here..."></textarea>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button onclick="encode()">Encode</button>
+    <button class="secondary" onclick="decode()">Decode</button>
+    <button class="secondary" onclick="swapIO()">Swap</button>
+    <button class="secondary" onclick="copyOutput()">Copy Output</button>
+    <button class="secondary" onclick="clearAll()">Clear</button>
+    <div class="mode-group">
+      <button class="active" data-mode="named" onclick="setMode('named',this)">Named</button>
+      <button data-mode="numeric" onclick="setMode('numeric',this)">Numeric</button>
+      <button data-mode="hex" onclick="setMode('hex',this)">Hex</button>
+    </div>
+  </div>
+
+  <div class="ref-section">
+    <h2>Common HTML Entities Reference</h2>
+    <table class="ref-table">
+      <thead><tr><th>Entity</th><th>Char</th><th>Numeric</th><th>Hex</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>&amp;amp;</td><td>&amp;</td><td>&amp;#38;</td><td>&amp;#x26;</td><td>Ampersand</td></tr>
+        <tr><td>&amp;lt;</td><td>&lt;</td><td>&amp;#60;</td><td>&amp;#x3C;</td><td>Less than</td></tr>
+        <tr><td>&amp;gt;</td><td>&gt;</td><td>&amp;#62;</td><td>&amp;#x3E;</td><td>Greater than</td></tr>
+        <tr><td>&amp;quot;</td><td>"</td><td>&amp;#34;</td><td>&amp;#x22;</td><td>Double quote</td></tr>
+        <tr><td>&amp;apos;</td><td>'</td><td>&amp;#39;</td><td>&amp;#x27;</td><td>Apostrophe</td></tr>
+        <tr><td>&amp;nbsp;</td><td>&nbsp;</td><td>&amp;#160;</td><td>&amp;#xA0;</td><td>Non-breaking space</td></tr>
+        <tr><td>&amp;copy;</td><td>&copy;</td><td>&amp;#169;</td><td>&amp;#xA9;</td><td>Copyright</td></tr>
+        <tr><td>&amp;reg;</td><td>&reg;</td><td>&amp;#174;</td><td>&amp;#xAE;</td><td>Registered</td></tr>
+        <tr><td>&amp;trade;</td><td>&trade;</td><td>&amp;#8482;</td><td>&amp;#x2122;</td><td>Trademark</td></tr>
+        <tr><td>&amp;euro;</td><td>&euro;</td><td>&amp;#8364;</td><td>&amp;#x20AC;</td><td>Euro sign</td></tr>
+        <tr><td>&amp;pound;</td><td>&pound;</td><td>&amp;#163;</td><td>&amp;#xA3;</td><td>Pound sign</td></tr>
+        <tr><td>&amp;yen;</td><td>&yen;</td><td>&amp;#165;</td><td>&amp;#xA5;</td><td>Yen sign</td></tr>
+        <tr><td>&amp;larr;</td><td>&larr;</td><td>&amp;#8592;</td><td>&amp;#x2190;</td><td>Left arrow</td></tr>
+        <tr><td>&amp;uarr;</td><td>&uarr;</td><td>&amp;#8593;</td><td>&amp;#x2191;</td><td>Up arrow</td></tr>
+        <tr><td>&amp;rarr;</td><td>&rarr;</td><td>&amp;#8594;</td><td>&amp;#x2192;</td><td>Right arrow</td></tr>
+        <tr><td>&amp;darr;</td><td>&darr;</td><td>&amp;#8595;</td><td>&amp;#x2193;</td><td>Down arrow</td></tr>
+        <tr><td>&amp;plus;</td><td>+</td><td>&amp;#43;</td><td>&amp;#x2B;</td><td>Plus sign</td></tr>
+        <tr><td>&amp;minus;</td><td>&minus;</td><td>&amp;#8722;</td><td>&amp;#x2212;</td><td>Minus sign</td></tr>
+        <tr><td>&amp;times;</td><td>&times;</td><td>&amp;#215;</td><td>&amp;#xD7;</td><td>Multiplication</td></tr>
+        <tr><td>&amp;divide;</td><td>&divide;</td><td>&amp;#247;</td><td>&amp;#xF7;</td><td>Division</td></tr>
+        <tr><td>&amp;ne;</td><td>&ne;</td><td>&amp;#8800;</td><td>&amp;#x2260;</td><td>Not equal</td></tr>
+        <tr><td>&amp;le;</td><td>&le;</td><td>&amp;#8804;</td><td>&amp;#x2264;</td><td>Less or equal</td></tr>
+        <tr><td>&amp;ge;</td><td>&ge;</td><td>&amp;#8805;</td><td>&amp;#x2265;</td><td>Greater or equal</td></tr>
+        <tr><td>&amp;infin;</td><td>&infin;</td><td>&amp;#8734;</td><td>&amp;#x221E;</td><td>Infinity</td></tr>
+        <tr><td>&amp;deg;</td><td>&deg;</td><td>&amp;#176;</td><td>&amp;#xB0;</td><td>Degree</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info">
+    <h2>About HTML Entity Encoding</h2>
+    <p>HTML entities are used to display reserved characters in HTML. Characters like <code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code>, and <code>"</code> have special meaning in HTML and must be escaped to display correctly. This tool converts between raw characters and their entity representations.</p>
+    <p style="margin-top:.5rem"><strong>Named entities</strong> use human-readable names (<code>&amp;amp;</code>), <strong>numeric entities</strong> use decimal codes (<code>&amp;#38;</code>), and <strong>hex entities</strong> use hexadecimal codes (<code>&amp;#x26;</code>). All three forms are valid HTML.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+let mode='named';
+const namedMap={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'};
+const extNamedMap={'\u00a0':'&nbsp;','\u00a9':'&copy;','\u00ae':'&reg;','\u2122':'&trade;','\u20ac':'&euro;','\u00a3':'&pound;','\u00a5':'&yen;','\u2190':'&larr;','\u2191':'&uarr;','\u2192':'&rarr;','\u2193':'&darr;','\u2212':'&minus;','\u00d7':'&times;','\u00f7':'&divide;','\u2260':'&ne;','\u2264':'&le;','\u2265':'&ge;','\u221e':'&infin;','\u00b0':'&deg;'};
+function setMode(m,btn){mode=m;document.querySelectorAll('.mode-group button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+function encodeChar(ch){const cp=ch.codePointAt(0);if(mode==='named'){if(namedMap[ch])return namedMap[ch];if(extNamedMap[ch])return extNamedMap[ch];if(cp>127)return'&#'+cp+';';return ch}if(mode==='numeric'){if(cp>127||namedMap[ch])return'&#'+cp+';';return ch}if(mode==='hex'){if(cp>127||namedMap[ch])return'&#x'+cp.toString(16).toUpperCase()+';';return ch}return ch}
+function encode(){const input=document.getElementById('input').value;let out='';for(const ch of input){out+=encodeChar(ch)}document.getElementById('output').value=out}
+function decode(){const input=document.getElementById('input').value;const ta=document.createElement('textarea');ta.innerHTML=input;document.getElementById('output').value=ta.value}
+function swapIO(){const inp=document.getElementById('input'),out=document.getElementById('output');const tmp=inp.value;inp.value=out.value;out.value=tmp}
+function copyOutput(){const v=document.getElementById('output').value;if(!v)return;navigator.clipboard.writeText(v).then(()=>{const btns=document.querySelectorAll('.btn-row button');const btn=[...btns].find(b=>b.textContent==='Copy Output');if(btn){btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy Output',1000)}})}
+function clearAll(){document.getElementById('input').value='';document.getElementById('output').value=''}
+</script>
+<script data-goatcounter="https://devtoolbox.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

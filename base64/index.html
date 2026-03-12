@@ -48,5 +48,6 @@ function b64Decode(){try{const i=document.getElementById('b64-input').value.trim
 function clearAll(){document.getElementById('b64-input').value='';document.getElementById('b64-output').value='';document.getElementById('b64-status').textContent=''}
 function copyOutput(id){const el=document.getElementById(id);if(el){navigator.clipboard.writeText(el.value||el.textContent).then(()=>{const btn=event.target;const orig=btn.textContent;btn.textContent='Copied!';setTimeout(()=>btn.textContent=orig,1000)})}}
 </script>
+<script data-goatcounter="https://devtoolbox.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

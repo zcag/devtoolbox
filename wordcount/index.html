@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Counter &amp; Character Counter — Count Words, Characters, Sentences Online</title>
+  <meta name="description" content="Free online word counter and character counter. Count words, characters, sentences, paragraphs, and estimate reading time instantly. All processing happens in your browser — no data is collected.">
+  <meta name="keywords" content="word counter, character counter, letter counter, sentence counter, paragraph counter, reading time calculator, word count online">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/wordcount/">
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:900px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem;margin-bottom:1.25rem}.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;text-align:center}.stat-card .stat-value{font-size:1.5rem;font-weight:700;color:var(--accent);font-family:var(--font-mono)}.stat-card .stat-label{font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-top:.25rem}textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-sans);font-size:.95rem;padding:.75rem;resize:vertical;outline:none;min-height:220px;line-height:1.6}textarea:focus{border-color:var(--accent)}.btn-row{display:flex;gap:.5rem;margin:.75rem 0;flex-wrap:wrap}button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}.section-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.5px;margin-top:1.25rem}.reading-time{display:flex;gap:1.5rem;margin-top:.5rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:.9rem;color:var(--text-muted)}.reading-time strong{color:var(--text)}.readability{margin-top:.5rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:.9rem;color:var(--text-muted)}.readability strong{color:var(--text)}.readability .score{font-size:1.25rem;font-weight:700;font-family:var(--font-mono)}.keyword-list{margin-top:.5rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px}.keyword-row{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;font-size:.85rem;border-bottom:1px solid var(--border)}.keyword-row:last-child{border-bottom:none}.keyword-row .word{color:var(--text);font-family:var(--font-mono)}.keyword-row .count{color:var(--text-muted)}.keyword-bar{flex:1;margin:0 .75rem;height:4px;background:var(--border);border-radius:2px;overflow:hidden}.keyword-bar-fill{height:100%;background:var(--accent);border-radius:2px}.empty-msg{color:var(--text-muted);font-size:.85rem;padding:.5rem 0}footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}.info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}@media(max-width:720px){header{flex-direction:column;gap:.5rem}.stats-grid{grid-template-columns:repeat(3,1fr)}.reading-time{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ wordcount</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>Word Counter &amp; Character Counter</h1>
+    <p>Count words, characters, sentences, paragraphs, and estimate reading time. All processing happens locally.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-value" id="s-words">0</div><div class="stat-label">Words</div></div>
+    <div class="stat-card"><div class="stat-value" id="s-chars">0</div><div class="stat-label">Characters</div></div>
+    <div class="stat-card"><div class="stat-value" id="s-chars-ns">0</div><div class="stat-label">Chars (no spaces)</div></div>
+    <div class="stat-card"><div class="stat-value" id="s-sentences">0</div><div class="stat-label">Sentences</div></div>
+    <div class="stat-card"><div class="stat-value" id="s-paragraphs">0</div><div class="stat-label">Paragraphs</div></div>
+    <div class="stat-card"><div class="stat-value" id="s-lines">0</div><div class="stat-label">Lines</div></div>
+  </div>
+
+  <textarea id="text-input" placeholder="Paste or type your text here..."></textarea>
+
+  <div class="btn-row">
+    <button class="secondary" onclick="copyStats()">Copy Stats</button>
+    <button class="secondary" onclick="clearText()">Clear</button>
+  </div>
+
+  <div class="section-label">Reading &amp; Speaking Time</div>
+  <div class="reading-time">
+    <div><strong id="r-read">0 min</strong> reading time <span style="color:var(--text-muted);font-size:.75rem">(200 wpm)</span></div>
+    <div><strong id="r-speak">0 min</strong> speaking time <span style="color:var(--text-muted);font-size:.75rem">(130 wpm)</span></div>
+  </div>
+
+  <div class="section-label">Readability</div>
+  <div class="readability" id="readability-box">
+    <span class="score" id="fk-score">—</span> <span id="fk-label">Flesch-Kincaid Reading Ease</span>
+    <div style="margin-top:.35rem;font-size:.8rem" id="fk-desc">Enter text to calculate readability.</div>
+  </div>
+
+  <div class="section-label">Keyword Density (Top 10)</div>
+  <div class="keyword-list" id="keyword-list">
+    <div class="empty-msg">Enter text to see keyword density.</div>
+  </div>
+
+  <div class="info">
+    <h2>About this word counter</h2>
+    <p>This free online word counter instantly analyzes your text as you type. It counts <strong>words</strong>, <strong>characters</strong> (with and without spaces), <strong>sentences</strong>, <strong>paragraphs</strong>, and <strong>lines</strong>.</p>
+    <p style="margin-top:.5rem"><strong>Reading time</strong> is estimated at 200 words per minute (average adult reading speed). Speaking time uses 130 words per minute, useful for preparing speeches or presentations.</p>
+    <p style="margin-top:.5rem">The <strong>Flesch-Kincaid Reading Ease</strong> score ranges from 0 to 100. Higher scores mean the text is easier to read: 90-100 is very easy (5th grade), 60-70 is standard (8th-9th grade), and below 30 is very difficult (college graduate level).</p>
+    <p style="margin-top:.5rem"><strong>Keyword density</strong> shows the most frequently used words, excluding common stop words. This is useful for SEO analysis and content optimization.</p>
+    <p style="margin-top:.5rem">Everything runs entirely in your browser using JavaScript. No text is sent to any server.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+const STOP_WORDS=new Set(['the','be','to','of','and','a','in','that','have','i','it','for','not','on','with','he','as','you','do','at','this','but','his','by','from','they','we','her','she','or','an','will','my','one','all','would','there','their','what','so','up','out','if','about','who','get','which','go','me','when','make','can','like','time','no','just','him','know','take','people','into','year','your','good','some','could','them','see','other','than','then','now','look','only','come','its','over','think','also','back','after','use','two','how','our','work','first','well','way','even','new','want','because','any','these','give','day','most','us','is','are','was','were','been','being','am','has','had','did','does','done','say','said','says','each','got','may','much','should','shall','must','need','too','very','still','own','through','between','same','off','another','while','here','both','few','those','such','before','more','where','many','down','been','made','find','long','right']);
+const input=document.getElementById('text-input');
+input.addEventListener('input',analyze);
+function analyze(){const text=input.value;const trimmed=text.trim();const words=trimmed?trimmed.split(/\s+/):[];const wordCount=words.length;const chars=text.length;const charsNoSpace=text.replace(/\s/g,'').length;const sentences=trimmed?trimmed.split(/[.!?]+/).filter(s=>s.trim().length>0).length:0;const paragraphs=trimmed?trimmed.split(/\n\s*\n/).filter(p=>p.trim().length>0).length:0;const lines=text?text.split('\n').length:0;document.getElementById('s-words').textContent=wordCount;document.getElementById('s-chars').textContent=chars;document.getElementById('s-chars-ns').textContent=charsNoSpace;document.getElementById('s-sentences').textContent=sentences;document.getElementById('s-paragraphs').textContent=paragraphs;document.getElementById('s-lines').textContent=lines;const readMin=wordCount/200;const speakMin=wordCount/130;document.getElementById('r-read').textContent=formatTime(readMin);document.getElementById('r-speak').textContent=formatTime(speakMin);updateReadability(words,sentences);updateKeywords(words)}
+function formatTime(min){if(min<1)return Math.max(0,Math.ceil(min*60))+' sec';const m=Math.floor(min);const s=Math.round((min-m)*60);return s>0?m+' min '+s+' sec':m+' min'}
+function countSyllables(word){word=word.toLowerCase().replace(/[^a-z]/g,'');if(word.length<=2)return 1;word=word.replace(/e$/,'');const vowels=word.match(/[aeiouy]+/g);return vowels?Math.max(1,vowels.length):1}
+function updateReadability(words,sentences){const el=document.getElementById('fk-score');const desc=document.getElementById('fk-desc');if(words.length<10||sentences<1){el.textContent='—';desc.textContent='Enter at least 10 words for a readability score.';return}const totalSyllables=words.reduce((sum,w)=>sum+countSyllables(w),0);const avgSentLen=words.length/sentences;const avgSyllPerWord=totalSyllables/words.length;const score=206.835-(1.015*avgSentLen)-(84.6*avgSyllPerWord);const clamped=Math.max(0,Math.min(100,Math.round(score*10)/10));el.textContent=clamped;let label='';if(clamped>=90)label='Very Easy (5th grade)';else if(clamped>=80)label='Easy (6th grade)';else if(clamped>=70)label='Fairly Easy (7th grade)';else if(clamped>=60)label='Standard (8th-9th grade)';else if(clamped>=50)label='Fairly Difficult (10th-12th grade)';else if(clamped>=30)label='Difficult (college level)';else label='Very Difficult (college graduate)';el.style.color=clamped>=60?'var(--green)':clamped>=30?'var(--accent)':'var(--red)';desc.textContent=label}
+function updateKeywords(words){const container=document.getElementById('keyword-list');if(words.length===0){container.innerHTML='<div class="empty-msg">Enter text to see keyword density.</div>';return}const freq={};words.forEach(w=>{const clean=w.toLowerCase().replace(/[^a-z0-9'-]/g,'');if(clean.length>1&&!STOP_WORDS.has(clean)){freq[clean]=(freq[clean]||0)+1}});const sorted=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,10);if(sorted.length===0){container.innerHTML='<div class="empty-msg">No significant keywords found.</div>';return}const max=sorted[0][1];container.innerHTML=sorted.map(([word,count])=>{const pct=(count/words.length*100).toFixed(1);const barW=(count/max*100).toFixed(0);return`<div class="keyword-row"><span class="word">${word}</span><div class="keyword-bar"><div class="keyword-bar-fill" style="width:${barW}%"></div></div><span class="count">${count} (${pct}%)</span></div>`}).join('')}
+function clearText(){input.value='';analyze();input.focus()}
+function copyStats(){const w=document.getElementById('s-words').textContent;const c=document.getElementById('s-chars').textContent;const cns=document.getElementById('s-chars-ns').textContent;const s=document.getElementById('s-sentences').textContent;const p=document.getElementById('s-paragraphs').textContent;const l=document.getElementById('s-lines').textContent;const rt=document.getElementById('r-read').textContent;const st=document.getElementById('r-speak').textContent;const fk=document.getElementById('fk-score').textContent;const stats=`Words: ${w}\nCharacters: ${c}\nCharacters (no spaces): ${cns}\nSentences: ${s}\nParagraphs: ${p}\nLines: ${l}\nReading time: ${rt}\nSpeaking time: ${st}\nFlesch-Kincaid score: ${fk}`;navigator.clipboard.writeText(stats).then(()=>{const btn=event.target;const orig=btn.textContent;btn.textContent='Copied!';setTimeout(()=>btn.textContent=orig,1000)})}
+</script>
+<script data-goatcounter="https://devtoolbox.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

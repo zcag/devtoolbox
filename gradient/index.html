@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Gradient Generator — Create Linear & Radial Gradients Online</title>
+  <meta name="description" content="Free CSS gradient generator. Create beautiful linear and radial gradients with multiple color stops, live preview, and one-click CSS copy. Runs entirely in your browser.">
+  <meta name="keywords" content="css gradient generator, linear gradient css, radial gradient css, css gradient background, gradient maker, css color gradient">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/gradient/">
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:900px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.85rem;padding:.75rem;resize:vertical;outline:none}textarea:focus{border-color:var(--accent)}textarea{min-height:80px}.btn-row{display:flex;gap:.5rem;margin:.75rem 0;flex-wrap:wrap}button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}.output-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.5px}footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}.info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}#preview{width:100%;min-height:250px;border-radius:8px;border:1px solid var(--border);margin-bottom:1.5rem}.controls{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:1rem}.control-group{margin-bottom:1rem}.control-group:last-child{margin-bottom:0}.control-group label{display:block;font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}.toggle-row{display:flex;gap:.5rem}.toggle-row button{flex:1}.toggle-row button.active{background:var(--accent)}.toggle-row button:not(.active){background:var(--surface);border:1px solid var(--border);color:var(--text-muted)}.angle-row{display:flex;align-items:center;gap:.75rem}.angle-row input[type="range"]{flex:1;accent-color:var(--accent)}.angle-row input[type="number"]{width:70px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.85rem;padding:.35rem .5rem;outline:none;text-align:center}.angle-row input[type="number"]:focus{border-color:var(--accent)}.radial-row{display:flex;gap:.75rem}.radial-row select{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.85rem;padding:.4rem .5rem;outline:none}.radial-row select:focus{border-color:var(--accent)}.stop{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap}.stop input[type="color"]{width:40px;height:34px;border:1px solid var(--border);border-radius:6px;background:var(--bg);cursor:pointer;padding:2px}.stop input[type="color"]::-webkit-color-swatch-wrapper{padding:2px}.stop input[type="color"]::-webkit-color-swatch{border-radius:3px;border:none}.stop input[type="range"]{flex:1;accent-color:var(--accent);min-width:100px}.stop .pos-val{font-family:var(--font-mono);font-size:.8rem;color:var(--text-muted);width:36px;text-align:right}.stop .remove-stop{background:var(--surface);border:1px solid var(--border);color:var(--red);width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.9rem;flex-shrink:0}.stop .remove-stop:hover{border-color:var(--red);background:rgba(248,81,73,.1)}.presets{display:flex;gap:.5rem;flex-wrap:wrap}.preset{padding:.4rem .75rem;border-radius:20px;font-size:.8rem;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:border-color .2s}.preset:hover{border-color:var(--accent)}@media(max-width:720px){header{flex-direction:column;gap:.5rem}.radial-row{flex-direction:column}.stop{gap:.35rem}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ gradient</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>CSS Gradient Generator</h1>
+    <p>Create beautiful linear and radial gradients with live preview and instant CSS output.</p>
+  </div>
+
+  <div id="preview"></div>
+
+  <div class="controls">
+    <div class="control-group">
+      <label>Gradient Type</label>
+      <div class="toggle-row">
+        <button id="btn-linear" class="active" onclick="setType('linear')">Linear</button>
+        <button id="btn-radial" onclick="setType('radial')">Radial</button>
+      </div>
+    </div>
+
+    <div class="control-group" id="linear-controls">
+      <label>Angle</label>
+      <div class="angle-row">
+        <input type="range" id="angle-slider" min="0" max="360" value="135" oninput="syncAngle(this.value)">
+        <input type="number" id="angle-input" min="0" max="360" value="135" oninput="syncAngle(this.value)">
+        <span style="color:var(--text-muted);font-size:.85rem">deg</span>
+      </div>
+    </div>
+
+    <div class="control-group" id="radial-controls" style="display:none">
+      <label>Shape &amp; Position</label>
+      <div class="radial-row">
+        <select id="radial-shape" onchange="update()">
+          <option value="circle">Circle</option>
+          <option value="ellipse" selected>Ellipse</option>
+        </select>
+        <select id="radial-position" onchange="update()">
+          <option value="center" selected>Center</option>
+          <option value="top">Top</option>
+          <option value="bottom">Bottom</option>
+          <option value="left">Left</option>
+          <option value="right">Right</option>
+          <option value="top left">Top Left</option>
+          <option value="top right">Top Right</option>
+          <option value="bottom left">Bottom Left</option>
+          <option value="bottom right">Bottom Right</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Color Stops</label>
+      <div id="stops-container"></div>
+      <button class="secondary" id="add-stop-btn" onclick="addStop()" style="margin-top:.5rem">+ Add Color Stop</button>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label>Presets</label>
+    <div class="presets">
+      <button class="preset" onclick="applyPreset('sunset')">Sunset</button>
+      <button class="preset" onclick="applyPreset('ocean')">Ocean</button>
+      <button class="preset" onclick="applyPreset('forest')">Forest</button>
+      <button class="preset" onclick="applyPreset('neon')">Neon</button>
+      <button class="preset" onclick="applyPreset('midnight')">Midnight</button>
+    </div>
+  </div>
+
+  <div style="margin-top:1.25rem">
+    <div class="output-label">Generated CSS</div>
+    <textarea id="css-output" readonly></textarea>
+    <div class="btn-row">
+      <button onclick="copyCSS()">Copy CSS</button>
+    </div>
+  </div>
+
+  <div class="info">
+    <h2>How to use CSS gradients</h2>
+    <p><strong>Linear gradients</strong> transition colors along a straight line defined by an angle. Use <code>linear-gradient(135deg, #color1, #color2)</code> in your CSS <code>background</code> property.</p>
+    <p style="margin-top:.5rem"><strong>Radial gradients</strong> radiate from a center point outward. Use <code>radial-gradient(circle at center, #color1, #color2)</code> for circular gradients or <code>ellipse</code> for oval shapes.</p>
+    <p style="margin-top:.5rem"><strong>Color stops</strong> let you control where each color appears in the gradient. A stop at 0% is the start, 100% is the end, and you can add up to 5 stops for complex gradients.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+var gradType='linear';var stops=[{color:'#58a6ff',pos:0},{color:'#3fb950',pos:100}];var presets={sunset:[{color:'#f85149',pos:0},{color:'#ff6a00',pos:50},{color:'#ffd700',pos:100}],ocean:[{color:'#0077b6',pos:0},{color:'#00b4d8',pos:50},{color:'#90e0ef',pos:100}],forest:[{color:'#1b4332',pos:0},{color:'#2d6a4f',pos:40},{color:'#52b788',pos:100}],neon:[{color:'#ff00ff',pos:0},{color:'#00ffff',pos:50},{color:'#ff00aa',pos:100}],midnight:[{color:'#0d1117',pos:0},{color:'#161b60',pos:50},{color:'#58a6ff',pos:100}]};
+
+function setType(t){gradType=t;document.getElementById('btn-linear').className=t==='linear'?'active':'';document.getElementById('btn-radial').className=t==='radial'?'active':'';document.getElementById('linear-controls').style.display=t==='linear'?'':'none';document.getElementById('radial-controls').style.display=t==='radial'?'':'none';update()}
+
+function syncAngle(v){v=Math.max(0,Math.min(360,parseInt(v)||0));document.getElementById('angle-slider').value=v;document.getElementById('angle-input').value=v;update()}
+
+function renderStops(){var c=document.getElementById('stops-container');c.innerHTML='';stops.forEach(function(s,i){var d=document.createElement('div');d.className='stop';d.innerHTML='<input type="color" value="'+s.color+'" onchange="stops['+i+'].color=this.value;update()">'+'<input type="range" min="0" max="100" value="'+s.pos+'" oninput="stops['+i+'].pos=parseInt(this.value);this.nextElementSibling.textContent=this.value+\'%\';update()">'+'<span class="pos-val">'+s.pos+'%</span>'+(stops.length>2?'<button class="remove-stop" onclick="removeStop('+i+')" title="Remove stop">&times;</button>':'');c.appendChild(d)});document.getElementById('add-stop-btn').style.display=stops.length>=5?'none':''}
+
+function addStop(){if(stops.length>=5)return;var last=stops[stops.length-1];var prev=stops[stops.length-2];var newPos=Math.min(100,Math.round((last.pos+prev.pos)/2));stops.push({color:'#8b949e',pos:newPos});stops.sort(function(a,b){return a.pos-b.pos});renderStops();update()}
+
+function removeStop(i){if(stops.length<=2)return;stops.splice(i,1);renderStops();update()}
+
+function buildCSS(){var stopsStr=stops.map(function(s){return s.color+' '+s.pos+'%'}).join(', ');if(gradType==='linear'){var angle=document.getElementById('angle-input').value;return'background: linear-gradient('+angle+'deg, '+stopsStr+');'}else{var shape=document.getElementById('radial-shape').value;var pos=document.getElementById('radial-position').value;return'background: radial-gradient('+shape+' at '+pos+', '+stopsStr+');'}}
+
+function update(){var css=buildCSS();document.getElementById('preview').style.cssText=css+'width:100%;min-height:250px;border-radius:8px;border:1px solid var(--border);margin-bottom:1.5rem;';document.getElementById('css-output').value=css}
+
+function copyCSS(){var el=document.getElementById('css-output');navigator.clipboard.writeText(el.value).then(function(){var btns=document.querySelectorAll('.btn-row button');var btn=btns[btns.length-1];var orig=btn.textContent;btn.textContent='Copied!';setTimeout(function(){btn.textContent=orig},1000)})}
+
+function applyPreset(name){var p=presets[name];if(!p)return;stops=p.map(function(s){return{color:s.color,pos:s.pos}});renderStops();update()}
+
+renderStops();update();
+</script>
+<script data-goatcounter="https://devtoolbox.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
