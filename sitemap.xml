@@ -11,4 +11,9 @@
   <url><loc>https://zcag.github.io/devtoolbox/diff/</loc><priority>0.8</priority></url>
   <url><loc>https://zcag.github.io/devtoolbox/color/</loc><priority>0.8</priority></url>
   <url><loc>https://zcag.github.io/devtoolbox/regex/</loc><priority>0.9</priority></url>
+  <url><loc>https://zcag.github.io/devtoolbox/cron/</loc><priority>0.9</priority></url>
+  <url><loc>https://zcag.github.io/devtoolbox/yaml/</loc><priority>0.9</priority></url>
+  <url><loc>https://zcag.github.io/devtoolbox/markdown/</loc><priority>0.8</priority></url>
+  <url><loc>https://zcag.github.io/devtoolbox/password/</loc><priority>0.9</priority></url>
+  <url><loc>https://zcag.github.io/devtoolbox/sql/</loc><priority>0.9</priority></url>
 </urlset>

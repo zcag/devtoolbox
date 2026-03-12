@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Formatter — Format &amp; Beautify SQL Online</title>
+  <meta name="description" content="Free online SQL formatter and beautifier. Paste your SQL to format with proper indentation, uppercase keywords, or minify. Runs entirely in your browser — no data sent to any server.">
+  <meta name="keywords" content="sql formatter, sql beautifier, format sql online, sql pretty print, sql formatter online, sql minifier, beautify sql">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/sql/">
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:900px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}textarea,input[type="text"],select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.85rem;padding:.75rem;resize:vertical;outline:none}textarea:focus,input[type="text"]:focus{border-color:var(--accent)}textarea{min-height:200px}.btn-row{display:flex;gap:.5rem;margin:.75rem 0;flex-wrap:wrap}button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}.output-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.5px}.status{font-size:.8rem;padding:.25rem 0}.status.ok{color:var(--green)}.status.err{color:var(--red)}footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}.info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}.options-row{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin:.5rem 0 .75rem;font-size:.85rem;color:var(--text-muted)}.options-row label{display:flex;align-items:center;gap:.4rem;cursor:pointer}.options-row select{width:auto;padding:.3rem .5rem;font-size:.85rem;font-family:var(--font-sans)}@media(max-width:720px){header{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ sql</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>SQL Formatter</h1>
+    <p>Format, beautify, and minify SQL instantly. Handles SELECT, INSERT, UPDATE, DELETE, CREATE and more. Everything runs in your browser — nothing is sent to a server.</p>
+  </div>
+  <textarea id="sql-input" placeholder="SELECT u.id, u.name, o.total FROM users u LEFT JOIN orders o ON u.id = o.user_id WHERE u.active = 1 ORDER BY u.name;" spellcheck="false"></textarea>
+  <div class="options-row">
+    <label>
+      Indent:
+      <select id="indent-size">
+        <option value="2">2 spaces</option>
+        <option value="4">4 spaces</option>
+      </select>
+    </label>
+    <label>
+      <input type="checkbox" id="uppercase-kw" checked>
+      Uppercase keywords
+    </label>
+  </div>
+  <div class="btn-row">
+    <button onclick="sqlFormat()">Format</button>
+    <button class="secondary" onclick="sqlMinify()">Minify</button>
+    <button class="secondary" onclick="copyOutput('sql-output')">Copy Output</button>
+    <button class="secondary" onclick="clearAll()">Clear</button>
+  </div>
+  <div id="sql-status" class="status"></div>
+  <div class="output-label">Output</div>
+  <textarea id="sql-output" readonly spellcheck="false"></textarea>
+
+  <div class="info">
+    <h2>How to use</h2>
+    <p>Paste your SQL query into the input area above. Click <strong>Format</strong> to pretty-print with keywords on new lines and proper indentation. Use <strong>Minify</strong> to collapse the query to a single line with normalized whitespace.</p>
+    <p style="margin-top:.5rem">Options let you choose 2 or 4-space indentation and whether keywords like SELECT, FROM, and WHERE are uppercased automatically.</p>
+    <p style="margin-top:.5rem">The formatter handles string literals (single and double quotes), single-line <code>--</code> comments, multi-line <code>/* */</code> comments, and nested subqueries with increased indentation. Your data never leaves your browser.</p>
+    <p style="margin-top:.5rem"><strong>Supported statements:</strong> SELECT, INSERT INTO, UPDATE, DELETE FROM, CREATE TABLE, ALTER TABLE, DROP TABLE, WITH (CTEs), subqueries, JOINs, CASE expressions, UNION / UNION ALL, and more.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+// ---------------------------------------------------------------------------
+// SQL Formatter — pure JS, no dependencies
+// ---------------------------------------------------------------------------
+
+// Token types
+const T_WORD    = 'WORD';
+const T_STRING  = 'STRING';
+const T_COMMENT_LINE  = 'COMMENT_LINE';
+const T_COMMENT_BLOCK = 'COMMENT_BLOCK';
+const T_LPAREN  = 'LPAREN';
+const T_RPAREN  = 'RPAREN';
+const T_COMMA   = 'COMMA';
+const T_SEMI    = 'SEMI';
+const T_OP      = 'OP';
+const T_WS      = 'WS';
+
+// Keywords that start a new line (full clause-level)
+const NEWLINE_BEFORE = new Set([
+  'SELECT','FROM','WHERE','AND','OR',
+  'JOIN','LEFT JOIN','RIGHT JOIN','INNER JOIN','OUTER JOIN',
+  'CROSS JOIN','FULL JOIN','FULL OUTER JOIN',
+  'ON',
+  'GROUP BY','ORDER BY','HAVING','LIMIT','OFFSET',
+  'INSERT INTO','INTO','VALUES',
+  'UPDATE','SET',
+  'DELETE','DELETE FROM',
+  'CREATE','CREATE TABLE','ALTER TABLE','DROP TABLE',
+  'UNION','UNION ALL',
+  'WITH',
+  'CASE','WHEN','THEN','ELSE','END',
+]);
+
+// Keywords that additionally indent the NEXT line
+const INDENT_AFTER = new Set([
+  'SELECT','WHERE','SET','VALUES',
+  'CASE','WHEN','THEN','ELSE',
+  'ON',
+]);
+
+// Keywords that dedent back (END closes CASE)
+const DEDENT_BEFORE = new Set(['END','ELSE','WHEN']);
+
+// ---------------------------------------------------------------------------
+// Tokenizer
+// ---------------------------------------------------------------------------
+function tokenize(sql) {
+  const tokens = [];
+  let i = 0;
+  const len = sql.length;
+
+  while (i < len) {
+    const ch = sql[i];
+
+    // Whitespace
+    if (/\s/.test(ch)) {
+      let j = i;
+      while (j < len && /\s/.test(sql[j])) j++;
+      tokens.push({ type: T_WS, value: sql.slice(i, j) });
+      i = j;
+      continue;
+    }
+
+    // Single-line comment --
+    if (ch === '-' && sql[i+1] === '-') {
+      let j = i;
+      while (j < len && sql[j] !== '\n') j++;
+      tokens.push({ type: T_COMMENT_LINE, value: sql.slice(i, j) });
+      i = j;
+      continue;
+    }
+
+    // Block comment /* ... */
+    if (ch === '/' && sql[i+1] === '*') {
+      let j = i + 2;
+      while (j < len && !(sql[j] === '*' && sql[j+1] === '/')) j++;
+      j += 2;
+      tokens.push({ type: T_COMMENT_BLOCK, value: sql.slice(i, j) });
+      i = j;
+      continue;
+    }
+
+    // String literal: single-quote (handles '' escapes)
+    if (ch === "'") {
+      let j = i + 1;
+      while (j < len) {
+        if (sql[j] === "'" && sql[j+1] === "'") { j += 2; continue; }
+        if (sql[j] === "'") { j++; break; }
+        j++;
+      }
+      tokens.push({ type: T_STRING, value: sql.slice(i, j) });
+      i = j;
+      continue;
+    }
+
+    // String literal: double-quote (identifiers in some dialects / MySQL)
+    if (ch === '"') {
+      let j = i + 1;
+      while (j < len) {
+        if (sql[j] === '"' && sql[j+1] === '"') { j += 2; continue; }
+        if (sql[j] === '"') { j++; break; }
+        j++;
+      }
+      tokens.push({ type: T_STRING, value: sql.slice(i, j) });
+      i = j;
+      continue;
+    }
+
+    // Backtick identifier (MySQL)
+    if (ch === '`') {
+      let j = i + 1;
+      while (j < len && sql[j] !== '`') j++;
+      j++;
+      tokens.push({ type: T_STRING, value: sql.slice(i, j) });
+      i = j;
+      continue;
+    }
+
+    // Parens
+    if (ch === '(') { tokens.push({ type: T_LPAREN, value: '(' }); i++; continue; }
+    if (ch === ')') { tokens.push({ type: T_RPAREN, value: ')' }); i++; continue; }
+    if (ch === ',') { tokens.push({ type: T_COMMA,  value: ',' }); i++; continue; }
+    if (ch === ';') { tokens.push({ type: T_SEMI,   value: ';' }); i++; continue; }
+
+    // Word / identifier
+    if (/[\w$]/.test(ch) || ch === '_') {
+      let j = i;
+      while (j < len && /[\w$.]/.test(sql[j])) j++;
+      tokens.push({ type: T_WORD, value: sql.slice(i, j) });
+      i = j;
+      continue;
+    }
+
+    // Operator / punctuation (catch-all single char)
+    tokens.push({ type: T_OP, value: ch });
+    i++;
+  }
+
+  return tokens;
+}
+
+// ---------------------------------------------------------------------------
+// Merge adjacent WORD tokens into compound keywords (e.g. LEFT JOIN)
+// ---------------------------------------------------------------------------
+function mergeCompoundKeywords(tokens) {
+  const compounds = [
+    'UNION ALL','LEFT JOIN','RIGHT JOIN','INNER JOIN','OUTER JOIN',
+    'FULL JOIN','FULL OUTER JOIN','CROSS JOIN',
+    'LEFT OUTER JOIN','RIGHT OUTER JOIN',
+    'GROUP BY','ORDER BY',
+    'INSERT INTO','DELETE FROM',
+    'CREATE TABLE','ALTER TABLE','DROP TABLE',
+    'NOT NULL','IS NULL','IS NOT NULL','NOT IN','NOT LIKE',
+  ].map(s => s.split(' '));
+
+  // Sort longest first so greedier matches win
+  compounds.sort((a, b) => b.length - a.length);
+
+  const out = [];
+  let i = 0;
+  // Build a flat array of only non-WS tokens paired with their positions in `tokens`
+  // Actually: work token-by-token, skip WS for keyword-merge purposes
+
+  while (i < tokens.length) {
+    const tok = tokens[i];
+    if (tok.type !== T_WORD) { out.push(tok); i++; continue; }
+
+    const upper = tok.value.toUpperCase();
+    let merged = false;
+
+    for (const parts of compounds) {
+      if (parts[0] !== upper) continue;
+      if (parts.length === 1) break;
+
+      // Try to match subsequent WORD tokens (skipping whitespace)
+      let j = i + 1;
+      let k = 1;
+      const collected = [i];
+      while (k < parts.length && j < tokens.length) {
+        if (tokens[j].type === T_WS) { j++; continue; }
+        if (tokens[j].type === T_WORD && tokens[j].value.toUpperCase() === parts[k]) {
+          collected.push(j);
+          k++;
+          j++;
+        } else {
+          break;
+        }
+      }
+      if (k === parts.length) {
+        // Remove WS tokens between the matched words and merge
+        out.push({ type: T_WORD, value: parts.join(' '), compound: true });
+        // Advance i past the last matched token
+        i = collected[collected.length - 1] + 1;
+        // Skip trailing WS that were between — already consumed by j walk
+        merged = true;
+        break;
+      }
+    }
+
+    if (!merged) { out.push(tok); i++; }
+  }
+
+  return out;
+}
+
+// ---------------------------------------------------------------------------
+// Format
+// ---------------------------------------------------------------------------
+function formatSQL(sql, indentSize, uppercaseKw) {
+  let tokens = tokenize(sql);
+  tokens = mergeCompoundKeywords(tokens);
+
+  const indent = ' '.repeat(indentSize);
+  let depth = 0;           // paren depth
+  let clauseDepth = 0;     // extra indent after certain keywords
+  const lines = [];
+  let current = '';
+  let prevMeaningful = null; // last non-WS token
+
+  function kw(word) {
+    const up = word.toUpperCase();
+    return uppercaseKw ? up : word;
+  }
+
+  function flush(addNewline) {
+    const trimmed = current.trim();
+    if (trimmed) lines.push(trimmed);
+    current = '';
+    if (addNewline !== false) current = '';
+  }
+
+  function indentStr(d) {
+    return indent.repeat(Math.max(0, d));
+  }
+
+  // We'll build an array of "logical tokens" and then render
+  // Strategy: iterate tokens, decide whether to emit newline+indent before each word
+
+  let i = 0;
+  const meaningful = tokens.filter(t => t.type !== T_WS);
+
+  // State stack for paren context
+  const stack = []; // 'subquery' | 'list'
+  let baseDepth = 0;   // tracks depth from clauses
+  let parenDepth = 0;
+
+  // Rebuild output line by line
+  let out = '';
+  // We'll accumulate output as a single string with \n, then return
+  let buf = [];
+  let lineTokens = []; // tokens on the current line (for spacing)
+
+  function newLine(d) {
+    if (buf.length) {
+      const last = buf[buf.length - 1];
+      // Don't double newline
+      if (last === '\n' || (last.endsWith && last.endsWith('\n'))) {
+        buf.push(indentStr(d));
+        return;
+      }
+    }
+    buf.push('\n' + indentStr(d));
+    lineTokens = [];
+  }
+
+  function emit(str) {
+    if (!str) return;
+    const last = buf.length ? buf[buf.length - 1] : '';
+    // Space management: add space if needed
+    const needsSpace = last && !last.endsWith(' ') && !last.endsWith('\n')
+      && !last.endsWith('(') && str !== ')' && str !== ',' && str !== ';'
+      && !str.startsWith('\n') && last !== '(';
+    if (needsSpace) buf.push(' ');
+    buf.push(str);
+    lineTokens.push(str);
+  }
+
+  let caseDepth = 0; // track CASE nesting for indentation
+
+  // Process meaningful tokens (WS dropped, comments handled specially)
+  let mi = 0;
+  while (mi < meaningful.length) {
+    const tok = meaningful[mi];
+
+    // Comments: always on their own line
+    if (tok.type === T_COMMENT_LINE || tok.type === T_COMMENT_BLOCK) {
+      if (buf.length && !buf[buf.length-1].endsWith('\n')) {
+        newLine(parenDepth + baseDepth);
+      } else if (!buf.length) {
+        buf.push(indentStr(parenDepth + baseDepth));
+      }
+      buf.push(tok.value);
+      newLine(parenDepth + baseDepth);
+      mi++;
+      continue;
+    }
+
+    if (tok.type === T_STRING) {
+      emit(tok.value);
+      mi++;
+      continue;
+    }
+
+    if (tok.type === T_LPAREN) {
+      // Check if next meaningful token is SELECT — subquery
+      const next = meaningful[mi + 1];
+      const isSubquery = next && next.type === T_WORD && next.value.toUpperCase() === 'SELECT';
+      stack.push(isSubquery ? 'subquery' : 'list');
+      parenDepth++;
+      emit('(');
+      if (isSubquery) {
+        newLine(parenDepth + baseDepth);
+      }
+      mi++;
+      continue;
+    }
+
+    if (tok.type === T_RPAREN) {
+      const ctx = stack.pop() || 'list';
+      parenDepth = Math.max(0, parenDepth - 1);
+      if (ctx === 'subquery') {
+        newLine(parenDepth + baseDepth);
+        // Remove trailing spaces before )
+        while (buf.length && buf[buf.length-1].trim() === '') buf.pop();
+        buf.push(')');
+      } else {
+        // close inline list — no newline
+        // Remove trailing space if any before )
+        if (buf.length && buf[buf.length-1] === ' ') buf.pop();
+        buf.push(')');
+      }
+      lineTokens.push(')');
+      mi++;
+      continue;
+    }
+
+    if (tok.type === T_COMMA) {
+      buf.push(',');
+      lineTokens.push(',');
+      // After comma inside a subquery paren, newline with current depth
+      if (stack.length && stack[stack.length-1] === 'subquery') {
+        newLine(parenDepth + baseDepth);
+      } else if (parenDepth === 0) {
+        // Top-level comma (e.g. between statements) — newline
+        newLine(parenDepth + baseDepth);
+      } else {
+        // Inside parenthesised list: stay on same line (e.g. column list, VALUES)
+        // but add a space (handled by emit)
+      }
+      mi++;
+      continue;
+    }
+
+    if (tok.type === T_SEMI) {
+      buf.push(';');
+      // After semicolon: blank line between statements
+      buf.push('\n');
+      newLine(0);
+      buf.push('\n');
+      baseDepth = 0;
+      parenDepth = 0;
+      stack.length = 0;
+      caseDepth = 0;
+      mi++;
+      continue;
+    }
+
+    // WORD token (includes compound keywords)
+    if (tok.type === T_WORD || tok.type === T_OP) {
+      const upper = tok.value.toUpperCase();
+      const isKw = NEWLINE_BEFORE.has(upper);
+
+      if (isKw && parenDepth === 0) {
+        // DEDENT before ELSE/WHEN/END
+        if (DEDENT_BEFORE.has(upper) && upper !== 'WHEN') {
+          baseDepth = Math.max(0, baseDepth - 1);
+        }
+        if (upper === 'WHEN' && caseDepth > 0) {
+          // keep depth of WHEN same as CASE level
+        }
+
+        // Emit newline before keyword (unless we're at the very start)
+        const bufStr = buf.join('');
+        if (bufStr.trim()) {
+          newLine(parenDepth + baseDepth);
+        } else {
+          // Start of output
+          buf.push(indentStr(parenDepth + baseDepth));
+        }
+
+        emit(kw(tok.value));
+
+        // Track CASE depth
+        if (upper === 'CASE') { caseDepth++; baseDepth++; }
+        if (upper === 'END') { caseDepth = Math.max(0, caseDepth - 1); }
+
+        // Indent after certain keywords
+        if (INDENT_AFTER.has(upper)) {
+          baseDepth++;
+        }
+
+        // Handle END dedent (already handled above, but baseDepth for END itself)
+        if (upper === 'END') {
+          baseDepth = Math.max(0, baseDepth - 1);
+        }
+
+      } else if (isKw && parenDepth > 0) {
+        // Keyword inside parens (subquery) — still new line
+        if (DEDENT_BEFORE.has(upper)) {
+          // slight dedent within paren context not tracked separately
+        }
+        const bufStr = buf.join('');
+        if (bufStr.trim() && !buf[buf.length-1].endsWith('\n') && !buf[buf.length-1].match(/^\s*$/)) {
+          newLine(parenDepth + baseDepth);
+        } else {
+          buf.push(indentStr(parenDepth + baseDepth));
+        }
+        emit(kw(tok.value));
+        if (INDENT_AFTER.has(upper)) baseDepth++;
+        if (upper === 'CASE') { caseDepth++; baseDepth++; }
+        if (upper === 'END') {
+          caseDepth = Math.max(0, caseDepth - 1);
+          baseDepth = Math.max(0, baseDepth - 1);
+        }
+      } else {
+        // Regular token: check if we need to start the first line
+        if (!buf.length) {
+          buf.push(indentStr(parenDepth + baseDepth));
+        }
+        // Operators: no space before some
+        const prevBuf = buf.length ? buf[buf.length-1] : '';
+        const noSpaceBefore = ['.','::', '::'].includes(tok.value)
+          || (tok.value === '.' )
+          || (tok.type === T_OP && ['.'].includes(tok.value));
+        const noSpaceAfterPrev = prevBuf.endsWith('.');
+
+        if (noSpaceBefore || noSpaceAfterPrev) {
+          buf.push(tok.type === T_WORD ? tok.value : tok.value);
+        } else {
+          emit(uppercaseKw && tok.type === T_WORD && /^[A-Z_][A-Z0-9_]*$/.test(upper) && NEWLINE_BEFORE.has(upper)
+            ? kw(tok.value) : tok.value);
+        }
+      }
+
+      mi++;
+      continue;
+    }
+
+    // Operators and other punctuation
+    emit(tok.value);
+    mi++;
+  }
+
+  let result = buf.join('');
+
+  // Post-process: clean up excessive blank lines, trim trailing whitespace per line
+  result = result
+    .split('\n')
+    .map(l => l.trimEnd())
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return result;
+}
+
+// ---------------------------------------------------------------------------
+// Minify
+// ---------------------------------------------------------------------------
+function minifySQL(sql) {
+  let tokens = tokenize(sql);
+  const parts = [];
+  let prevType = null;
+
+  for (const tok of tokens) {
+    if (tok.type === T_WS) continue;
+    if (tok.type === T_COMMENT_LINE || tok.type === T_COMMENT_BLOCK) continue;
+
+    const needSpace = parts.length > 0
+      && tok.type !== T_RPAREN
+      && tok.value !== ','
+      && tok.value !== ';'
+      && tok.value !== '.'
+      && prevType !== T_LPAREN
+      && prevType !== null
+      && parts[parts.length-1] !== '.'
+    ;
+    if (needSpace) parts.push(' ');
+    parts.push(tok.value);
+    prevType = tok.type;
+  }
+
+  return parts.join('').trim();
+}
+
+// ---------------------------------------------------------------------------
+// UI
+// ---------------------------------------------------------------------------
+function getOptions() {
+  return {
+    indentSize: parseInt(document.getElementById('indent-size').value, 10),
+    uppercaseKw: document.getElementById('uppercase-kw').checked,
+  };
+}
+
+function setStatus(msg, isErr) {
+  const el = document.getElementById('sql-status');
+  el.className = 'status ' + (isErr ? 'err' : 'ok');
+  el.textContent = msg;
+}
+
+function sqlFormat() {
+  const input = document.getElementById('sql-input').value;
+  if (!input.trim()) { setStatus('Paste some SQL first.', true); return; }
+  try {
+    const { indentSize, uppercaseKw } = getOptions();
+    const result = formatSQL(input, indentSize, uppercaseKw);
+    document.getElementById('sql-output').value = result;
+    setStatus('Formatted successfully.', false);
+  } catch(e) {
+    setStatus('Error: ' + e.message, true);
+  }
+}
+
+function sqlMinify() {
+  const input = document.getElementById('sql-input').value;
+  if (!input.trim()) { setStatus('Paste some SQL first.', true); return; }
+  try {
+    const result = minifySQL(input);
+    document.getElementById('sql-output').value = result;
+    setStatus('Minified successfully.', false);
+  } catch(e) {
+    setStatus('Error: ' + e.message, true);
+  }
+}
+
+function clearAll() {
+  document.getElementById('sql-input').value = '';
+  document.getElementById('sql-output').value = '';
+  document.getElementById('sql-status').className = 'status';
+  document.getElementById('sql-status').textContent = '';
+}
+
+function copyOutput(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    navigator.clipboard.writeText(el.value || el.textContent).then(() => {
+      const btn = event.target;
+      const orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = orig, 1000);
+    });
+  }
+}
+</script>
+</body>
+</html>

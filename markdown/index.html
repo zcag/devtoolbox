@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Preview — Live Markdown Editor &amp; Renderer</title>
+  <meta name="description" content="Free online markdown preview and editor. Write markdown on the left, see rendered HTML on the right in real time. Supports headings, tables, code blocks, and more. Runs entirely in your browser.">
+  <meta name="keywords" content="markdown preview, markdown editor online, markdown renderer, live markdown preview, markdown to html, online markdown viewer">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/markdown/">
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--yellow:#d29922;--purple:#bc8cff;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}
+    /* Layout */
+    main{flex:1;display:flex;flex-direction:column;padding:1.5rem 2rem 2rem}
+    .hero{padding:.5rem 0 1.25rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}
+    .toolbar{display:flex;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap;align-items:center}
+    button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}
+    .status{font-size:.8rem;padding:.15rem 0;margin-left:auto}.status.ok{color:var(--green)}.status.err{color:var(--red)}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:1rem;flex:1;min-height:0}
+    .pane{display:flex;flex-direction:column;min-height:0}
+    .pane-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.5px}
+    textarea#md-input{flex:1;width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.85rem;padding:.75rem;resize:none;outline:none;min-height:420px}textarea#md-input:focus{border-color:var(--accent)}
+    .preview-wrap{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:1rem 1.25rem;overflow-y:auto;min-height:420px}
+    /* Preview content styles */
+    .md-preview{color:var(--text);font-family:var(--font-sans);font-size:.95rem;line-height:1.7}
+    .md-preview h1,.md-preview h2,.md-preview h3,.md-preview h4,.md-preview h5,.md-preview h6{color:var(--text);margin:1.25rem 0 .5rem;line-height:1.3}
+    .md-preview h1{font-size:1.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+    .md-preview h2{font-size:1.4rem;padding-bottom:.3rem;border-bottom:1px solid var(--border)}
+    .md-preview h3{font-size:1.15rem}.md-preview h4{font-size:1rem}.md-preview h5{font-size:.9rem}.md-preview h6{font-size:.85rem;color:var(--text-muted)}
+    .md-preview p{margin:.6rem 0}
+    .md-preview a{color:var(--accent);text-decoration:none}.md-preview a:hover{text-decoration:underline}
+    .md-preview strong{font-weight:700;color:var(--text)}
+    .md-preview em{font-style:italic;color:var(--text)}
+    .md-preview code{font-family:var(--font-mono);font-size:.82rem;background:#1c2333;border:1px solid var(--border);border-radius:4px;padding:.1em .35em;color:#e3b341}
+    .md-preview pre{background:#161b22;border:1px solid var(--border);border-radius:8px;padding:1rem;overflow-x:auto;margin:.75rem 0;position:relative}
+    .md-preview pre code{background:none;border:none;padding:0;font-size:.82rem;color:var(--text);display:block;white-space:pre}
+    .md-preview pre .hl-kw{color:var(--purple)}.md-preview pre .hl-str{color:#a5d6ff}.md-preview pre .hl-num{color:#79c0ff}.md-preview pre .hl-cmt{color:var(--text-muted);font-style:italic}.md-preview pre .hl-fn{color:var(--green)}.md-preview pre .hl-op{color:#ff7b72}.md-preview pre .lang-tag{position:absolute;top:.4rem;right:.75rem;font-size:.7rem;color:var(--text-muted);font-family:var(--font-mono)}
+    .md-preview ul,.md-preview ol{padding-left:1.75rem;margin:.5rem 0}
+    .md-preview li{margin:.2rem 0}
+    .md-preview li>ul,.md-preview li>ol{margin:0}
+    .md-preview blockquote{border-left:3px solid var(--accent);padding:.5rem .75rem .5rem 1rem;margin:.75rem 0;color:var(--text-muted);background:#161b22;border-radius:0 6px 6px 0}
+    .md-preview blockquote p{margin:0}
+    .md-preview hr{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
+    .md-preview img{max-width:100%;border-radius:6px;border:1px solid var(--border);margin:.5rem 0}
+    .md-preview table{border-collapse:collapse;width:100%;margin:.75rem 0;font-size:.88rem}
+    .md-preview th,.md-preview td{border:1px solid var(--border);padding:.45rem .75rem;text-align:left}
+    .md-preview th{background:var(--surface);color:var(--text);font-weight:600}
+    .md-preview td{background:var(--bg)}
+    .md-preview tr:nth-child(even) td{background:#0d1117cc}
+    /* Info section */
+    .info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}
+    .info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}
+    footer{text-align:center;padding:2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border);flex-shrink:0}footer a{color:var(--accent);text-decoration:none}
+    @media(max-width:720px){header{flex-direction:column;gap:.5rem}main{padding:1rem}.split{grid-template-columns:1fr;grid-template-rows:auto auto}textarea#md-input{min-height:260px}.preview-wrap{min-height:260px}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ markdown</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>Markdown Preview</h1>
+    <p>Write markdown on the left, see the rendered preview update instantly on the right. Everything runs in your browser.</p>
+  </div>
+  <div class="toolbar">
+    <button onclick="copyHTML()">Copy HTML</button>
+    <button class="secondary" onclick="clearAll()">Clear</button>
+    <span id="md-status" class="status"></span>
+  </div>
+  <div class="split">
+    <div class="pane">
+      <div class="pane-label">Markdown Input</div>
+      <textarea id="md-input" spellcheck="false" placeholder="Type your markdown here..."></textarea>
+    </div>
+    <div class="pane">
+      <div class="pane-label">Preview</div>
+      <div class="preview-wrap">
+        <div id="md-preview" class="md-preview"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info">
+    <h2>Supported Markdown syntax</h2>
+    <p>This editor supports the most common Markdown constructs: <strong>headings</strong> (<code>#</code> through <code>######</code>), <strong>bold</strong> (<code>**text**</code>), <strong>italic</strong> (<code>*text*</code>), <strong>inline code</strong> (<code>`code`</code>), <strong>fenced code blocks</strong> (triple backticks with optional language tag), <strong>links</strong> (<code>[text](url)</code>), <strong>images</strong> (<code>![alt](url)</code>), <strong>unordered lists</strong> (<code>- item</code>), <strong>ordered lists</strong> (<code>1. item</code>), <strong>blockquotes</strong> (<code>&gt; text</code>), <strong>horizontal rules</strong> (<code>---</code>), and <strong>tables</strong> (GFM pipe syntax).</p>
+    <p style="margin-top:.5rem">Code blocks get basic syntax highlighting for JavaScript, Python, HTML, CSS, and shell. The <strong>Copy HTML</strong> button copies the raw rendered HTML to your clipboard. No data is ever sent to a server.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+// ─── Markdown parser ──────────────────────────────────────────────────────────
+
+function escapeHTML(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Basic syntax highlighter — colorises JS/Python/HTML/CSS/shell tokens
+function highlight(code, lang){
+  let s = escapeHTML(code);
+  lang = (lang||'').toLowerCase();
+  if(!lang || lang==='text' || lang==='plain') return s;
+
+  if(lang==='html'||lang==='xml'){
+    s = s.replace(/(&lt;\/?[\w.-]+)/g,'<span class="hl-kw">$1</span>');
+    s = s.replace(/([\w-]+=)(&quot;[^&]*&quot;)/g,'$1<span class="hl-str">$2</span>');
+    s = s.replace(/(&lt;!--[\s\S]*?--&gt;)/g,'<span class="hl-cmt">$1</span>');
+    return s;
+  }
+  if(lang==='css'){
+    s = s.replace(/(\/\*[\s\S]*?\*\/)/g,'<span class="hl-cmt">$1</span>');
+    s = s.replace(/([.#]?[\w-]+)(\s*\{)/g,'<span class="hl-fn">$1</span>$2');
+    s = s.replace(/([\w-]+)(\s*:)/g,'<span class="hl-kw">$1</span>$2');
+    s = s.replace(/:\s*([^;{}\n]+)/g,function(m,v){return ': <span class="hl-str">'+v+'</span>';});
+    return s;
+  }
+  // JS / TS
+  if(lang==='js'||lang==='javascript'||lang==='ts'||lang==='typescript'){
+    s = s.replace(/(\/\/[^\n]*)/g,'<span class="hl-cmt">$1</span>');
+    s = s.replace(/(\/\*[\s\S]*?\*\/)/g,'<span class="hl-cmt">$1</span>');
+    s = s.replace(/\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|typeof|instanceof|class|extends|import|export|from|default|async|await|try|catch|finally|throw|null|undefined|true|false|this|super|of|in)\b/g,'<span class="hl-kw">$1</span>');
+    s = s.replace(/(&quot;[^&]*?&quot;|&#x27;[^&#]*?&#x27;|`[^`]*?`)/g,'<span class="hl-str">$1</span>');
+    s = s.replace(/\b(\d+\.?\d*)\b/g,'<span class="hl-num">$1</span>');
+    s = s.replace(/\b([a-zA-Z_$][\w$]*)\s*(?=\()/g,'<span class="hl-fn">$1</span>');
+    return s;
+  }
+  // Python
+  if(lang==='python'||lang==='py'){
+    s = s.replace(/(#[^\n]*)/g,'<span class="hl-cmt">$1</span>');
+    s = s.replace(/\b(def|class|return|if|elif|else|for|while|import|from|as|with|try|except|finally|raise|pass|break|continue|lambda|yield|in|not|and|or|is|True|False|None|self|async|await)\b/g,'<span class="hl-kw">$1</span>');
+    s = s.replace(/(&quot;[^&]*?&quot;|&#x27;[^&#]*?&#x27;)/g,'<span class="hl-str">$1</span>');
+    s = s.replace(/\b(\d+\.?\d*)\b/g,'<span class="hl-num">$1</span>');
+    s = s.replace(/\b([a-zA-Z_][\w]*)\s*(?=\()/g,'<span class="hl-fn">$1</span>');
+    return s;
+  }
+  // Shell / bash
+  if(lang==='bash'||lang==='sh'||lang==='shell'||lang==='zsh'){
+    s = s.replace(/(#[^\n]*)/g,'<span class="hl-cmt">$1</span>');
+    s = s.replace(/\b(if|then|else|elif|fi|for|in|do|done|while|case|esac|function|return|exit|export|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|curl|wget)\b/g,'<span class="hl-kw">$1</span>');
+    s = s.replace(/(&quot;[^&]*?&quot;|&#x27;[^&#]*?&#x27;)/g,'<span class="hl-str">$1</span>');
+    s = s.replace(/(\$[\w{][^;\s]*)/g,'<span class="hl-num">$1</span>');
+    return s;
+  }
+  return s;
+}
+
+function parseMarkdown(src){
+  if(!src) return '';
+  let html = '';
+  const lines = src.split('\n');
+  let i = 0;
+
+  // Helper: parse inline markup within a text string (already HTML-escaped)
+  function inlineEscape(raw){
+    let s = escapeHTML(raw);
+    // images before links
+    s = s.replace(/!\[([^\]]*)\]\(([^)]*)\)/g,'<img src="$2" alt="$1">');
+    s = s.replace(/\[([^\]]+)\]\(([^)]*)\)/g,'<a href="$2">$1</a>');
+    s = s.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>');
+    s = s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+    s = s.replace(/__(.+?)__/g,'<strong>$1</strong>');
+    s = s.replace(/\*(.+?)\*/g,'<em>$1</em>');
+    s = s.replace(/_([^_\s][^_]*)_/g,'<em>$1</em>');
+    s = s.replace(/~~(.+?)~~/g,'<del>$1</del>');
+    s = s.replace(/`([^`]+)`/g,'<code>$1</code>');
+    return s;
+  }
+
+  while(i < lines.length){
+    const line = lines[i];
+
+    // Blank line
+    if(line.trim() === ''){
+      i++;
+      continue;
+    }
+
+    // Fenced code block ```lang
+    if(/^```/.test(line)){
+      const lang = line.slice(3).trim();
+      const codeLines = [];
+      i++;
+      while(i < lines.length && !/^```/.test(lines[i])){
+        codeLines.push(lines[i]);
+        i++;
+      }
+      i++; // skip closing ```
+      const codeRaw = codeLines.join('\n');
+      const codeHL = highlight(codeRaw, lang);
+      const langTag = lang ? `<span class="lang-tag">${escapeHTML(lang)}</span>` : '';
+      html += `<pre>${langTag}<code>${codeHL}</code></pre>\n`;
+      continue;
+    }
+
+    // Horizontal rule --- or *** or ___
+    if(/^(\-{3,}|\*{3,}|_{3,})\s*$/.test(line)){
+      html += '<hr>\n';
+      i++;
+      continue;
+    }
+
+    // Headings # through ######
+    const hMatch = line.match(/^(#{1,6})\s+(.*)/);
+    if(hMatch){
+      const level = hMatch[1].length;
+      html += `<h${level}>${inlineEscape(hMatch[2])}</h${level}>\n`;
+      i++;
+      continue;
+    }
+
+    // Blockquote
+    if(/^>\s?/.test(line)){
+      const bqLines = [];
+      while(i < lines.length && /^>\s?/.test(lines[i])){
+        bqLines.push(lines[i].replace(/^>\s?/,''));
+        i++;
+      }
+      // Recurse for nested markdown inside blockquote
+      html += `<blockquote>${parseMarkdown(bqLines.join('\n'))}</blockquote>\n`;
+      continue;
+    }
+
+    // Table — GFM pipe syntax
+    if(/\|/.test(line) && i+1 < lines.length && /^\|?[\s\-:]+[\|\-:]+/.test(lines[i+1])){
+      const headerCells = line.replace(/^\||\|$/g,'').split('|').map(c=>c.trim());
+      i += 2; // skip header + separator
+      let tableHTML = '<table><thead><tr>';
+      headerCells.forEach(c=>{ tableHTML += `<th>${inlineEscape(c)}</th>`; });
+      tableHTML += '</tr></thead><tbody>';
+      while(i < lines.length && /\|/.test(lines[i]) && lines[i].trim()!==''){
+        const cells = lines[i].replace(/^\||\|$/g,'').split('|').map(c=>c.trim());
+        tableHTML += '<tr>';
+        cells.forEach(c=>{ tableHTML += `<td>${inlineEscape(c)}</td>`; });
+        tableHTML += '</tr>';
+        i++;
+      }
+      tableHTML += '</tbody></table>';
+      html += tableHTML + '\n';
+      continue;
+    }
+
+    // Unordered list
+    if(/^[\-\*\+]\s/.test(line)){
+      html += '<ul>\n';
+      while(i < lines.length && /^[\-\*\+]\s/.test(lines[i])){
+        html += `<li>${inlineEscape(lines[i].replace(/^[\-\*\+]\s/,''))}</li>\n`;
+        i++;
+      }
+      html += '</ul>\n';
+      continue;
+    }
+
+    // Ordered list
+    if(/^\d+\.\s/.test(line)){
+      html += '<ol>\n';
+      while(i < lines.length && /^\d+\.\s/.test(lines[i])){
+        html += `<li>${inlineEscape(lines[i].replace(/^\d+\.\s/,''))}</li>\n`;
+        i++;
+      }
+      html += '</ol>\n';
+      continue;
+    }
+
+    // Paragraph — collect consecutive non-special lines
+    const paraLines = [];
+    while(
+      i < lines.length &&
+      lines[i].trim() !== '' &&
+      !/^#{1,6}\s/.test(lines[i]) &&
+      !/^```/.test(lines[i]) &&
+      !/^>\s?/.test(lines[i]) &&
+      !/^[\-\*\+]\s/.test(lines[i]) &&
+      !/^\d+\.\s/.test(lines[i]) &&
+      !/^(\-{3,}|\*{3,}|_{3,})\s*$/.test(lines[i]) &&
+      !/\|/.test(lines[i])
+    ){
+      paraLines.push(lines[i]);
+      i++;
+    }
+    if(paraLines.length){
+      html += `<p>${inlineEscape(paraLines.join(' '))}</p>\n`;
+    } else {
+      i++; // safety: advance if nothing matched
+    }
+  }
+
+  return html;
+}
+
+// ─── Live preview ─────────────────────────────────────────────────────────────
+
+let debounceTimer = null;
+const input = document.getElementById('md-input');
+const preview = document.getElementById('md-preview');
+const status = document.getElementById('md-status');
+
+function renderPreview(){
+  const src = input.value;
+  if(!src.trim()){
+    preview.innerHTML = '<span style="color:var(--text-muted);font-size:.88rem">Nothing to preview yet.</span>';
+    status.textContent = '';
+    return;
+  }
+  try{
+    preview.innerHTML = parseMarkdown(src);
+    const wordCount = src.trim().split(/\s+/).length;
+    const lineCount = src.split('\n').length;
+    status.className = 'status ok';
+    status.textContent = `${wordCount} words · ${lineCount} lines`;
+  } catch(e){
+    status.className = 'status err';
+    status.textContent = 'Parse error: ' + e.message;
+  }
+}
+
+input.addEventListener('input', function(){
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(renderPreview, 80);
+});
+
+function copyHTML(){
+  const htmlOut = preview.innerHTML;
+  if(!htmlOut){
+    status.className='status err';
+    status.textContent='Nothing to copy';
+    return;
+  }
+  navigator.clipboard.writeText(htmlOut).then(function(){
+    const btn = document.querySelector('button');
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(function(){ btn.textContent = orig; }, 1200);
+    status.className = 'status ok';
+    status.textContent = 'HTML copied to clipboard';
+  }).catch(function(){
+    status.className='status err';
+    status.textContent='Copy failed — try a modern browser';
+  });
+}
+
+function clearAll(){
+  input.value = '';
+  renderPreview();
+  input.focus();
+}
+
+// ─── Example content ──────────────────────────────────────────────────────────
+
+const EXAMPLE = `# Welcome to Markdown Preview
+
+A **live editor** that renders your markdown instantly. Try editing this text!
+
+## Text formatting
+
+You can write *italic*, **bold**, or ***bold italic*** text. Combine them freely.
+Strike through text with ~~strikethrough~~.
+
+Inline \`code\` looks like this. Links work too: [DevToolBox](/devtoolbox/)
+
+## Code blocks
+
+\`\`\`javascript
+// JavaScript with syntax highlighting
+const greet = (name) => {
+  const msg = \`Hello, \${name}!\`;
+  return msg;
+};
+
+console.log(greet('world'));
+\`\`\`
+
+\`\`\`python
+def fibonacci(n):
+    # Recursive fibonacci
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+print(fibonacci(10))
+\`\`\`
+
+## Lists
+
+Unordered:
+- First item
+- Second item
+- Third item with **bold text**
+
+Ordered:
+1. Step one
+2. Step two
+3. Step three
+
+## Blockquote
+
+> "Any sufficiently advanced technology is indistinguishable from magic."
+> — Arthur C. Clarke
+
+## Table
+
+| Feature       | Supported | Notes                    |
+|---------------|-----------|--------------------------|
+| Headings      | Yes       | \`#\` through \`######\` |
+| Bold / Italic | Yes       | \`**\` and \`*\`         |
+| Code blocks   | Yes       | With syntax highlighting |
+| Tables        | Yes       | GFM pipe syntax          |
+| Images        | Yes       | \`![alt](url)\`          |
+
+## Horizontal rule
+
+---
+
+Images are supported with standard markdown syntax:
+
+![Example image placeholder](https://via.placeholder.com/400x120/161b22/58a6ff?text=Image+Placeholder)
+`;
+
+input.value = EXAMPLE;
+renderPreview();
+</script>
+</body>
+</html>

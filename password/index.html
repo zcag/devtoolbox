@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Generator — Strong Random Password Generator Online</title>
+  <meta name="description" content="Free online password generator. Create strong, random, secure passwords instantly. Choose length, character sets, and generate multiple passwords at once. 100% client-side — nothing sent to any server.">
+  <meta name="keywords" content="password generator, random password, strong password generator, secure password, online password generator, password creator">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/password/">
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--orange:#d29922;--bright-green:#56d364;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:900px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}
+
+    /* Password display */
+    .pw-display{display:flex;align-items:center;gap:.75rem;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:.75rem 1rem;margin-bottom:.75rem}.pw-display:focus-within{border-color:var(--accent)}#main-password{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--font-mono);font-size:1.1rem;letter-spacing:.05em;word-break:break-all}
+
+    /* Strength bar */
+    .strength-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem}.strength-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}.strength-bar{height:100%;border-radius:3px;transition:width .3s,background .3s;width:0}.strength-label{font-size:.8rem;font-weight:600;min-width:80px;text-align:right}
+
+    /* Controls */
+    .controls{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:1.5rem}.control-row{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}.control-row:last-child{margin-bottom:0}.control-label{font-size:.85rem;color:var(--text-muted);min-width:110px}input[type="range"]{flex:1;accent-color:var(--accent);cursor:pointer}#len-display{font-size:.85rem;font-family:var(--font-mono);color:var(--text);min-width:36px;text-align:right}.checkboxes{display:flex;flex-wrap:wrap;gap:.75rem 1.5rem}label.cb{display:flex;align-items:center;gap:.4rem;font-size:.85rem;cursor:pointer;user-select:none}label.cb input[type="checkbox"]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer}
+
+    /* Buttons */
+    .btn-row{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}button.copy-btn{background:var(--surface);border:1px solid var(--border);color:var(--text-muted);padding:.3rem .65rem;font-size:.75rem}button.copy-btn:hover{border-color:var(--accent);color:var(--text)}
+
+    /* Multi-password list */
+    .output-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.5px}.pw-list{display:flex;flex-direction:column;gap:.4rem;margin-bottom:2rem}.pw-item{display:flex;align-items:center;gap:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.6rem .75rem;font-family:var(--font-mono);font-size:.85rem;letter-spacing:.04em;word-break:break-all}.pw-item span{flex:1;color:var(--text)}
+
+    /* Info */
+    .info{margin-top:1rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}.info h3{color:var(--text);font-size:.95rem;margin:.75rem 0 .35rem}
+
+    footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}
+    @media(max-width:720px){header{flex-direction:column;gap:.5rem}.control-row{flex-wrap:wrap}.checkboxes{gap:.6rem 1rem}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ password</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>Password Generator</h1>
+    <p>Generate strong, random passwords instantly using cryptographically secure randomness. Everything runs in your browser — nothing is ever sent to a server.</p>
+  </div>
+
+  <!-- Main password display -->
+  <div class="pw-display">
+    <input id="main-password" type="text" readonly aria-label="Generated password">
+    <button class="copy-btn" onclick="copyPw('main-password', this)">Copy</button>
+  </div>
+
+  <!-- Strength indicator -->
+  <div class="strength-row">
+    <div class="strength-bar-wrap"><div id="strength-bar" class="strength-bar"></div></div>
+    <div id="strength-label" class="strength-label"></div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="control-row">
+      <span class="control-label">Length</span>
+      <input type="range" id="pw-length" min="8" max="128" value="16" oninput="onSettingChange()">
+      <span id="len-display">16</span>
+    </div>
+    <div class="control-row">
+      <span class="control-label">Characters</span>
+      <div class="checkboxes">
+        <label class="cb"><input type="checkbox" id="cb-upper" checked onchange="onSettingChange()"> Uppercase (A–Z)</label>
+        <label class="cb"><input type="checkbox" id="cb-lower" checked onchange="onSettingChange()"> Lowercase (a–z)</label>
+        <label class="cb"><input type="checkbox" id="cb-digits" checked onchange="onSettingChange()"> Numbers (0–9)</label>
+        <label class="cb"><input type="checkbox" id="cb-symbols" checked onchange="onSettingChange()"> Symbols (!@#$%^&amp;*)</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action buttons -->
+  <div class="btn-row">
+    <button onclick="generateAll()">Generate</button>
+    <button class="secondary" onclick="copyPw('main-password', this)">Copy Password</button>
+  </div>
+
+  <!-- Batch list -->
+  <div class="output-label">5 More Passwords</div>
+  <div class="pw-list" id="pw-list"></div>
+
+  <!-- SEO / info section -->
+  <div class="info">
+    <h2>About Password Security</h2>
+    <p>A password's strength is measured in <strong>entropy bits</strong> — the logarithm of the number of possible combinations. More bits means more time needed to brute-force the password.</p>
+
+    <h3>How Entropy is Calculated</h3>
+    <p>Entropy = log₂(pool size) × length. With uppercase + lowercase + digits + symbols the pool is 94 characters. A 16-character password from that pool gives ~104 bits of entropy — far beyond what modern hardware can crack.</p>
+
+    <h3>Strength Thresholds</h3>
+    <p>This tool uses the following scale: <strong style="color:var(--red)">Weak</strong> (&lt;40 bits), <strong style="color:var(--orange)">Fair</strong> (40–60 bits), <strong style="color:var(--green)">Strong</strong> (60–80 bits), <strong style="color:var(--bright-green)">Very Strong</strong> (80+ bits). Most accounts only need a Strong password; use Very Strong for password manager master passwords and encryption keys.</p>
+
+    <h3>Why Cryptographic Randomness Matters</h3>
+    <p>This tool uses <code>crypto.getRandomValues()</code> — the same Web Cryptography API used by browsers for TLS. It produces statistically unbiased, unpredictable randomness unlike <code>Math.random()</code>, which is only pseudo-random and unsuitable for security purposes.</p>
+
+    <h3>Best Practices</h3>
+    <p>Use a unique password for every account. Store them in a reputable password manager (Bitwarden, 1Password, KeePass). Enable two-factor authentication wherever possible. A 16-character random password is stronger than a 30-character memorable phrase with predictable substitutions.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+const UPPER   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const LOWER   = 'abcdefghijklmnopqrstuvwxyz';
+const DIGITS  = '0123456789';
+const SYMBOLS = '!@#$%^&*()-_=+[]{}|;:,.<>?';
+
+function buildPool() {
+  let pool = '';
+  if (document.getElementById('cb-upper').checked)   pool += UPPER;
+  if (document.getElementById('cb-lower').checked)   pool += LOWER;
+  if (document.getElementById('cb-digits').checked)  pool += DIGITS;
+  if (document.getElementById('cb-symbols').checked) pool += SYMBOLS;
+  return pool;
+}
+
+function randomPassword(len, pool) {
+  if (!pool) return '';
+  const buf = new Uint32Array(len);
+  crypto.getRandomValues(buf);
+  let pw = '';
+  for (let i = 0; i < len; i++) {
+    pw += pool[buf[i] % pool.length];
+  }
+  return pw;
+}
+
+function entropyBits(poolSize, len) {
+  if (poolSize === 0 || len === 0) return 0;
+  return Math.log2(poolSize) * len;
+}
+
+function strengthInfo(bits) {
+  if (bits < 40)  return { label: 'Weak',        pct: Math.max(5, bits / 40 * 25),  color: 'var(--red)' };
+  if (bits < 60)  return { label: 'Fair',         pct: 25 + (bits - 40) / 20 * 25,  color: 'var(--orange)' };
+  if (bits < 80)  return { label: 'Strong',       pct: 50 + (bits - 60) / 20 * 25,  color: 'var(--green)' };
+  return           { label: 'Very Strong',         pct: Math.min(100, 75 + (bits - 80) / 40 * 25), color: 'var(--bright-green)' };
+}
+
+function updateStrength(pool, len) {
+  const bits = entropyBits(pool.length, len);
+  const s = strengthInfo(bits);
+  const bar = document.getElementById('strength-bar');
+  const lbl = document.getElementById('strength-label');
+  bar.style.width = s.pct + '%';
+  bar.style.background = s.color;
+  lbl.style.color = s.color;
+  lbl.textContent = pool.length ? s.label + ' (' + Math.round(bits) + ' bits)' : 'Select a character set';
+}
+
+function generateAll() {
+  const len  = parseInt(document.getElementById('pw-length').value, 10);
+  const pool = buildPool();
+
+  document.getElementById('len-display').textContent = len;
+  document.getElementById('main-password').value = pool ? randomPassword(len, pool) : '';
+  updateStrength(pool, len);
+
+  const list = document.getElementById('pw-list');
+  list.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    const pw = pool ? randomPassword(len, pool) : '';
+    const item = document.createElement('div');
+    item.className = 'pw-item';
+    item.innerHTML = '<span>' + escHtml(pw) + '</span>';
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = function() { copyText(pw, btn); };
+    item.appendChild(btn);
+    list.appendChild(item);
+  }
+}
+
+function onSettingChange() {
+  document.getElementById('len-display').textContent = document.getElementById('pw-length').value;
+  generateAll();
+}
+
+function copyPw(id, btn) {
+  const val = document.getElementById(id).value;
+  copyText(val, btn);
+}
+
+function copyText(text, btn) {
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = orig, 1200);
+  });
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Generate on load
+generateAll();
+</script>
+</body>
+</html>
