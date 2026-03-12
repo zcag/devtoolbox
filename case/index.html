@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Case Converter — Convert Text to UPPERCASE, lowercase, Title Case & More</title>
+  <meta name="description" content="Free online text case converter. Convert text to UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case and more. Runs entirely in your browser — no data sent to any server.">
+  <meta name="keywords" content="text case converter, uppercase converter, lowercase converter, title case converter, camelCase, snake_case, kebab-case, text transform, case changer">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/case/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Text Case Converter — Convert Text to UPPERCASE, lowercase, Title Case & More">
+  <meta property="og:description" content="Free online text case converter. Convert text to UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case and more. No data leaves your browser.">
+  <meta property="og:url" content="https://zcag.github.io/devtoolbox/case/">
+  <meta property="og:site_name" content="DevToolBox">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Text Case Converter — DevToolBox">
+  <meta name="twitter:description" content="Convert text to UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case and more. Free, private, browser-based.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Text Case Converter",
+    "description": "Convert text between UPPERCASE, lowercase, Title Case, Sentence case, camelCase, PascalCase, snake_case, kebab-case, CONSTANT_CASE, and dot.case.",
+    "url": "https://zcag.github.io/devtoolbox/case/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "browserRequirements": "Requires JavaScript"
+  }
+  </script>
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:900px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.85rem;padding:.75rem;resize:vertical;outline:none;min-height:200px}textarea:focus{border-color:var(--accent)}.btn-row{display:flex;gap:.5rem;margin:.75rem 0;flex-wrap:wrap}button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}.output-label{font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.5px}.status{font-size:.8rem;padding:.25rem 0}.status.ok{color:var(--green)}.status.err{color:var(--red)}.stats{font-size:.8rem;color:var(--text-muted);padding:.35rem 0}footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}.info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}.info h3{color:var(--text);font-size:.95rem;margin-top:.75rem;margin-bottom:.35rem}@media(max-width:720px){header{flex-direction:column;gap:.5rem}.btn-row{gap:.35rem}.btn-row button{font-size:.75rem;padding:.4rem .7rem}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ case</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>Text Case Converter</h1>
+    <p>Convert text between UPPERCASE, lowercase, Title Case, camelCase, snake_case, and more. Everything runs in your browser.</p>
+  </div>
+  <textarea id="case-input" placeholder="Type or paste your text here..." oninput="updateStats()"></textarea>
+  <div id="case-stats" class="stats">0 characters, 0 words</div>
+  <div class="btn-row">
+    <button onclick="convert('upper')">UPPERCASE</button>
+    <button onclick="convert('lower')">lowercase</button>
+    <button onclick="convert('title')">Title Case</button>
+    <button onclick="convert('sentence')">Sentence case</button>
+    <button onclick="convert('camel')">camelCase</button>
+    <button onclick="convert('pascal')">PascalCase</button>
+    <button onclick="convert('snake')">snake_case</button>
+    <button onclick="convert('kebab')">kebab-case</button>
+    <button onclick="convert('constant')">CONSTANT_CASE</button>
+    <button onclick="convert('dot')">dot.case</button>
+  </div>
+  <div id="case-status" class="status"></div>
+  <div class="output-label">Output</div>
+  <textarea id="case-output" readonly></textarea>
+  <div class="btn-row">
+    <button class="secondary" onclick="copyOutput()">Copy Output</button>
+    <button class="secondary" onclick="clearAll()">Clear</button>
+  </div>
+
+  <div class="info">
+    <h2>About the Text Case Converter</h2>
+    <p>This free text case converter lets you quickly transform any text between 10 different case formats. It handles special characters, numbers, and Unicode text gracefully. All processing happens locally in your browser — your text is never sent to any server.</p>
+    <h3>Supported Conversions</h3>
+    <p><strong>UPPERCASE</strong> — Converts all letters to uppercase. Useful for headings, acronyms, or emphasis.</p>
+    <p><strong>lowercase</strong> — Converts all letters to lowercase. Common for normalization and comparison.</p>
+    <p><strong>Title Case</strong> — Capitalizes the first letter of each word. Standard for book titles, headings, and proper nouns.</p>
+    <p><strong>Sentence case</strong> — Capitalizes only the first letter of each sentence. Natural for paragraph text.</p>
+    <p><strong>camelCase</strong> — Joins words with no separator, capitalizing each word except the first. Standard in JavaScript and Java variable naming.</p>
+    <p><strong>PascalCase</strong> — Like camelCase but with the first letter capitalized. Used for class names in many programming languages.</p>
+    <p><strong>snake_case</strong> — Joins words with underscores, all lowercase. Common in Python, Ruby, and database column names.</p>
+    <p><strong>kebab-case</strong> — Joins words with hyphens, all lowercase. Standard for CSS classes, URL slugs, and CLI flags.</p>
+    <p><strong>CONSTANT_CASE</strong> — Joins words with underscores, all uppercase. Used for constants and environment variables.</p>
+    <p><strong>dot.case</strong> — Joins words with dots, all lowercase. Used in configuration keys and Java package names.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+function getInput(){return document.getElementById('case-input').value}
+function setOutput(v){document.getElementById('case-output').value=v}
+function setStatus(msg,type){const el=document.getElementById('case-status');el.className='status '+(type||'');el.textContent=msg}
+
+function updateStats(){
+  const text=getInput();
+  const chars=text.length;
+  const words=text.trim()===''?0:text.trim().split(/\s+/).length;
+  document.getElementById('case-stats').textContent=chars+' character'+(chars!==1?'s':'')+', '+words+' word'+(words!==1?'s':'');
+}
+
+function splitWords(text){
+  // Split text into words, handling camelCase, PascalCase, snake_case, kebab-case, dot.case, spaces, etc.
+  return text
+    .replace(/([a-z])([A-Z])/g,'$1 $2')       // camelCase boundaries
+    .replace(/([A-Z]+)([A-Z][a-z])/g,'$1 $2')  // ABCDef -> ABC Def
+    .replace(/[_\-\.]+/g,' ')                    // underscores, hyphens, dots to spaces
+    .replace(/\s+/g,' ')                         // normalize spaces
+    .trim()
+    .split(' ')
+    .filter(function(w){return w.length>0});
+}
+
+function toTitleCase(text){
+  return text.replace(/\S+/g,function(word){
+    return word.charAt(0).toUpperCase()+word.slice(1).toLowerCase();
+  });
+}
+
+function toSentenceCase(text){
+  return text.toLowerCase().replace(/(^\s*|[.!?]\s+)([a-z])/g,function(match,sep,char){
+    return sep+char.toUpperCase();
+  }).replace(/^[a-z]/,function(c){return c.toUpperCase()});
+}
+
+function convert(type){
+  const input=getInput();
+  if(!input){setStatus('Enter some text first.','err');setOutput('');return}
+  var result='';
+  switch(type){
+    case 'upper':
+      result=input.toUpperCase();
+      break;
+    case 'lower':
+      result=input.toLowerCase();
+      break;
+    case 'title':
+      result=toTitleCase(input);
+      break;
+    case 'sentence':
+      result=toSentenceCase(input);
+      break;
+    case 'camel':{
+      const words=splitWords(input);
+      result=words.map(function(w,i){
+        w=w.toLowerCase();
+        return i===0?w:w.charAt(0).toUpperCase()+w.slice(1);
+      }).join('');
+      break;
+    }
+    case 'pascal':{
+      const words=splitWords(input);
+      result=words.map(function(w){
+        w=w.toLowerCase();
+        return w.charAt(0).toUpperCase()+w.slice(1);
+      }).join('');
+      break;
+    }
+    case 'snake':{
+      const words=splitWords(input);
+      result=words.map(function(w){return w.toLowerCase()}).join('_');
+      break;
+    }
+    case 'kebab':{
+      const words=splitWords(input);
+      result=words.map(function(w){return w.toLowerCase()}).join('-');
+      break;
+    }
+    case 'constant':{
+      const words=splitWords(input);
+      result=words.map(function(w){return w.toUpperCase()}).join('_');
+      break;
+    }
+    case 'dot':{
+      const words=splitWords(input);
+      result=words.map(function(w){return w.toLowerCase()}).join('.');
+      break;
+    }
+  }
+  setOutput(result);
+  var labels={upper:'UPPERCASE',lower:'lowercase',title:'Title Case',sentence:'Sentence case',camel:'camelCase',pascal:'PascalCase',snake:'snake_case',kebab:'kebab-case',constant:'CONSTANT_CASE',dot:'dot.case'};
+  setStatus('Converted to '+labels[type],'ok');
+}
+
+function copyOutput(){
+  const text=document.getElementById('case-output').value;
+  if(!text){setStatus('Nothing to copy.','err');return}
+  navigator.clipboard.writeText(text).then(function(){
+    setStatus('Copied to clipboard!','ok');
+  });
+}
+
+function clearAll(){
+  document.getElementById('case-input').value='';
+  document.getElementById('case-output').value='';
+  document.getElementById('case-status').textContent='';
+  updateStats();
+}
+
+updateStats();
+</script>
+<script data-goatcounter="https://devtoolbox.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

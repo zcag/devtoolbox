@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number Base Converter — Binary, Decimal, Hex, Octal Converter Online</title>
+  <meta name="description" content="Free online number base converter. Convert between binary, decimal, hexadecimal, and octal instantly. Supports custom bases 2-36 and large numbers. Runs in your browser.">
+  <meta name="keywords" content="binary to decimal, hex to decimal, number base converter, binary converter, octal converter, hexadecimal converter, base conversion, radix converter">
+  <link rel="canonical" href="https://zcag.github.io/devtoolbox/base-converter/">
+  <meta property="og:title" content="Number Base Converter — Binary, Decimal, Hex, Octal">
+  <meta property="og:description" content="Convert between binary, decimal, hexadecimal, and octal instantly. Supports custom bases 2-36 and BigInt for large numbers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zcag.github.io/devtoolbox/base-converter/">
+  <meta property="og:site_name" content="DevToolBox">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Number Base Converter",
+    "description": "Convert between binary, decimal, hexadecimal, octal, and custom bases (2-36). Supports large numbers via BigInt.",
+    "url": "https://zcag.github.io/devtoolbox/base-converter/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "browserRequirements": "Requires a modern web browser with JavaScript enabled"
+  }
+  </script>
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--text-muted:#8b949e;--accent:#58a6ff;--accent-hover:#79c0ff;--green:#3fb950;--red:#f85149;--font-mono:'SF Mono','Cascadia Code','Fira Code',Consolas,monospace;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh}header{border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}nav a{color:var(--text-muted);text-decoration:none;font-size:.85rem;margin-left:1rem}nav a:hover{color:var(--accent)}.logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none}.logo span{color:var(--text-muted);font-weight:400}main{max-width:900px;margin:0 auto;padding:2rem}.hero{padding:1rem 0 2rem}.hero h1{font-size:1.75rem;margin-bottom:.5rem}.hero p{color:var(--text-muted);font-size:1rem}
+    .field-group{margin-bottom:1rem}.field-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem}.field-label label{font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}.field-label .base-tag{font-family:var(--font-mono);font-size:.7rem;color:var(--accent);background:rgba(88,166,255,.1);padding:.15rem .4rem;border-radius:4px}.field-row{display:flex;gap:.5rem}.field-row input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:1rem;padding:.6rem .75rem;outline:none;transition:border-color .2s}.field-row input:focus{border-color:var(--accent)}.field-row input.error{border-color:var(--red)}.copy-btn{background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text-muted);font-size:.75rem;padding:.5rem .75rem;cursor:pointer;white-space:nowrap;transition:all .2s}.copy-btn:hover{border-color:var(--accent);color:var(--accent)}.error-msg{color:var(--red);font-size:.8rem;margin-top:.25rem;min-height:1.2em}
+    .bit-display{margin:1.5rem 0;padding:1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px}.bit-display h3{font-size:.85rem;color:var(--text-muted);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.5px}.bit-groups{display:flex;flex-wrap:wrap;gap:.75rem;font-family:var(--font-mono)}.bit-group{display:flex;gap:2px}.bit-cell{width:22px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.85rem;border-radius:3px;font-weight:600}.bit-0{background:rgba(139,148,158,.1);color:var(--text-muted)}.bit-1{background:rgba(63,185,80,.15);color:var(--green)}.bit-separator{width:8px;display:flex;align-items:center;justify-content:center;color:var(--border);font-size:.7rem}.bit-index{font-size:.55rem;color:var(--text-muted);text-align:center;margin-top:2px}
+    .custom-section{margin:2rem 0;padding:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:8px}.custom-section h3{font-size:.95rem;margin-bottom:.75rem}.custom-row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}.custom-row input{flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:1rem;padding:.6rem .75rem;outline:none}.custom-row input:focus{border-color:var(--accent)}.custom-row input.error{border-color:var(--red)}.base-select{background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.9rem;padding:.6rem .5rem;outline:none;cursor:pointer;min-width:80px}.base-select:focus{border-color:var(--accent)}
+    button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}button:hover{background:var(--accent-hover)}button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}button.secondary:hover{border-color:var(--accent)}
+    footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border)}footer a{color:var(--accent);text-decoration:none}.info{margin-top:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:.9rem;line-height:1.6}.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.75rem}.info h3{color:var(--text);font-size:.95rem;margin:1rem 0 .5rem}.info table{width:100%;border-collapse:collapse;margin:.75rem 0}.info th,.info td{text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--border);font-size:.85rem}.info th{color:var(--text);font-weight:600}.info td{font-family:var(--font-mono);color:var(--text-muted)}.info code{background:rgba(88,166,255,.1);color:var(--accent);padding:.1rem .3rem;border-radius:3px;font-family:var(--font-mono);font-size:.85rem}
+    @media(max-width:720px){header{flex-direction:column;gap:.5rem}.field-row input{font-size:.9rem}.bit-cell{width:18px;height:24px;font-size:.75rem}.bit-groups{gap:.5rem}.custom-row{flex-direction:column}.custom-row input{min-width:100%}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="/devtoolbox/" class="logo">DevToolBox <span>/ base-converter</span></a>
+  <nav><a href="/devtoolbox/">All Tools</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>Number Base Converter</h1>
+    <p>Convert between binary, octal, decimal, and hexadecimal instantly. Type in any field and the others update live.</p>
+  </div>
+
+  <div class="field-group">
+    <div class="field-label">
+      <label for="bin-input">Binary</label>
+      <span class="base-tag">base 2</span>
+    </div>
+    <div class="field-row">
+      <input type="text" id="bin-input" placeholder="e.g. 10110101" spellcheck="false" autocomplete="off">
+      <button class="copy-btn" onclick="copyField('bin-input')">Copy</button>
+    </div>
+    <div class="error-msg" id="bin-error"></div>
+  </div>
+
+  <div class="field-group">
+    <div class="field-label">
+      <label for="oct-input">Octal</label>
+      <span class="base-tag">base 8</span>
+    </div>
+    <div class="field-row">
+      <input type="text" id="oct-input" placeholder="e.g. 265" spellcheck="false" autocomplete="off">
+      <button class="copy-btn" onclick="copyField('oct-input')">Copy</button>
+    </div>
+    <div class="error-msg" id="oct-error"></div>
+  </div>
+
+  <div class="field-group">
+    <div class="field-label">
+      <label for="dec-input">Decimal</label>
+      <span class="base-tag">base 10</span>
+    </div>
+    <div class="field-row">
+      <input type="text" id="dec-input" placeholder="e.g. 181" spellcheck="false" autocomplete="off">
+      <button class="copy-btn" onclick="copyField('dec-input')">Copy</button>
+    </div>
+    <div class="error-msg" id="dec-error"></div>
+  </div>
+
+  <div class="field-group">
+    <div class="field-label">
+      <label for="hex-input">Hexadecimal</label>
+      <span class="base-tag">base 16</span>
+    </div>
+    <div class="field-row">
+      <input type="text" id="hex-input" placeholder="e.g. B5" spellcheck="false" autocomplete="off">
+      <button class="copy-btn" onclick="copyField('hex-input')">Copy</button>
+    </div>
+    <div class="error-msg" id="hex-error"></div>
+  </div>
+
+  <div class="bit-display">
+    <h3>Binary Bit Display</h3>
+    <div class="bit-groups" id="bit-display">
+      <span style="color:var(--text-muted);font-size:.85rem">Enter a number above to see its binary representation</span>
+    </div>
+  </div>
+
+  <div class="custom-section">
+    <h3>Custom Base Converter</h3>
+    <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:.75rem">Convert to or from any base between 2 and 36. Type a value here to update all fields above, or type above to see the result here.</p>
+    <div class="custom-row">
+      <input type="text" id="custom-input" placeholder="Enter a number..." spellcheck="false" autocomplete="off">
+      <label for="custom-base" style="font-size:.85rem;color:var(--text-muted);white-space:nowrap">Base:</label>
+      <select id="custom-base" class="base-select">
+      </select>
+      <button class="copy-btn" onclick="copyField('custom-input')">Copy</button>
+    </div>
+    <div class="error-msg" id="custom-error"></div>
+  </div>
+
+  <div class="info">
+    <h2>Understanding Number Bases</h2>
+    <p>A number base (or radix) determines how many unique digits are used to represent numbers. We use base 10 (decimal) in everyday life because we have 10 fingers, but computers work in base 2 (binary) since transistors have two states: on and off.</p>
+
+    <h3>Common Number Bases</h3>
+    <table>
+      <tr><th>Base</th><th>Name</th><th>Digits</th><th>Used For</th></tr>
+      <tr><td>2</td><td>Binary</td><td>0-1</td><td>Digital circuits, low-level programming</td></tr>
+      <tr><td>8</td><td>Octal</td><td>0-7</td><td>Unix file permissions, legacy systems</td></tr>
+      <tr><td>10</td><td>Decimal</td><td>0-9</td><td>Everyday counting, mathematics</td></tr>
+      <tr><td>16</td><td>Hexadecimal</td><td>0-9, A-F</td><td>Memory addresses, colors, byte values</td></tr>
+    </table>
+
+    <h3>Quick Reference</h3>
+    <table>
+      <tr><th>Decimal</th><th>Binary</th><th>Octal</th><th>Hex</th></tr>
+      <tr><td>0</td><td>0000</td><td>0</td><td>0</td></tr>
+      <tr><td>8</td><td>1000</td><td>10</td><td>8</td></tr>
+      <tr><td>10</td><td>1010</td><td>12</td><td>A</td></tr>
+      <tr><td>15</td><td>1111</td><td>17</td><td>F</td></tr>
+      <tr><td>16</td><td>10000</td><td>20</td><td>10</td></tr>
+      <tr><td>255</td><td>11111111</td><td>377</td><td>FF</td></tr>
+    </table>
+
+    <h3>Common Use Cases</h3>
+    <p><strong>CSS Colors:</strong> Hex values like <code>#FF5733</code> represent RGB color channels (255, 87, 51 in decimal).</p>
+    <p style="margin-top:.4rem"><strong>IPv4 Addresses:</strong> Each octet is a decimal number 0-255 (one byte, or 8 binary digits).</p>
+    <p style="margin-top:.4rem"><strong>File Permissions:</strong> Unix chmod uses octal, e.g., <code>755</code> means rwxr-xr-x.</p>
+    <p style="margin-top:.4rem"><strong>Memory Addresses:</strong> Displayed in hexadecimal for compact representation of large binary values.</p>
+    <p style="margin-top:.75rem">This tool supports arbitrarily large numbers using BigInt. Your data never leaves your browser.</p>
+  </div>
+</main>
+<footer>
+  <p><a href="/devtoolbox/">DevToolBox</a> — all processing happens in your browser. No data is collected or transmitted.</p>
+  <p style="margin-top:.5rem"><a href="https://github.com/zcag/devtoolbox">Source</a></p>
+</footer>
+<script>
+(function(){
+  const DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const fields = {
+    bin: { el: document.getElementById('bin-input'), err: document.getElementById('bin-error'), base: 2 },
+    oct: { el: document.getElementById('oct-input'), err: document.getElementById('oct-error'), base: 8 },
+    dec: { el: document.getElementById('dec-input'), err: document.getElementById('dec-error'), base: 10 },
+    hex: { el: document.getElementById('hex-input'), err: document.getElementById('hex-error'), base: 16 }
+  };
+  const customInput = document.getElementById('custom-input');
+  const customBase = document.getElementById('custom-base');
+  const customError = document.getElementById('custom-error');
+  const bitDisplay = document.getElementById('bit-display');
+
+  // Populate base selector
+  for (let i = 2; i <= 36; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = i;
+    if (i === 16) opt.selected = true;
+    customBase.appendChild(opt);
+  }
+
+  function validChars(base) {
+    return DIGITS.slice(0, base);
+  }
+
+  function validateInput(str, base) {
+    if (str === '') return { valid: true, value: null };
+    const upper = str.toUpperCase().replace(/\s/g, '');
+    const allowed = validChars(base);
+    let negative = false;
+    let start = 0;
+    if (upper[0] === '-') { negative = true; start = 1; }
+    if (start >= upper.length) return { valid: false, error: 'Enter digits after the sign' };
+    const invalidChars = [];
+    for (let i = start; i < upper.length; i++) {
+      if (!allowed.includes(upper[i])) {
+        invalidChars.push(upper[i]);
+      }
+    }
+    if (invalidChars.length > 0) {
+      const unique = [...new Set(invalidChars)];
+      return { valid: false, error: 'Invalid character' + (unique.length > 1 ? 's' : '') + ' for base ' + base + ': ' + unique.join(', ') + '. Valid digits: ' + allowed };
+    }
+    try {
+      const digits = upper.slice(start);
+      let value;
+      if (base === 10) {
+        value = BigInt(digits);
+      } else if (base === 16) {
+        value = BigInt('0x' + digits);
+      } else if (base === 8) {
+        value = BigInt('0o' + digits);
+      } else if (base === 2) {
+        value = BigInt('0b' + digits);
+      } else {
+        value = parseBigIntBase(digits, base);
+      }
+      if (negative) value = -value;
+      return { valid: true, value: value };
+    } catch (e) {
+      return { valid: false, error: 'Invalid number' };
+    }
+  }
+
+  function parseBigIntBase(str, base) {
+    const b = BigInt(base);
+    let result = 0n;
+    for (let i = 0; i < str.length; i++) {
+      const d = DIGITS.indexOf(str[i]);
+      result = result * b + BigInt(d);
+    }
+    return result;
+  }
+
+  function bigIntToBase(value, base) {
+    if (value === 0n) return '0';
+    const b = BigInt(base);
+    let negative = false;
+    if (value < 0n) { negative = true; value = -value; }
+    let result = '';
+    while (value > 0n) {
+      result = DIGITS[Number(value % b)] + result;
+      value = value / b;
+    }
+    return negative ? '-' + result : result;
+  }
+
+  function updateBitDisplay(value) {
+    if (value === null || value === undefined) {
+      bitDisplay.innerHTML = '<span style="color:var(--text-muted);font-size:.85rem">Enter a number above to see its binary representation</span>';
+      return;
+    }
+    let negative = false;
+    let v = value;
+    if (v < 0n) { negative = true; v = -v; }
+    let binStr = v === 0n ? '0' : bigIntToBase(v, 2);
+    // Pad to multiple of 8
+    const pad = (8 - (binStr.length % 8)) % 8;
+    binStr = '0'.repeat(pad) + binStr;
+    // Limit display to 128 bits for readability
+    const truncated = binStr.length > 128;
+    if (truncated) binStr = binStr.slice(binStr.length - 128);
+    let html = '';
+    if (negative) html += '<span style="color:var(--red);font-size:1.1rem;font-weight:700;margin-right:4px">-</span>';
+    if (truncated) html += '<span style="color:var(--text-muted);font-size:.85rem;margin-right:4px">...</span>';
+    for (let i = 0; i < binStr.length; i += 8) {
+      html += '<div class="bit-group">';
+      for (let j = 0; j < 8 && (i + j) < binStr.length; j++) {
+        const bit = binStr[i + j];
+        html += '<div class="bit-cell bit-' + bit + '">' + bit + '</div>';
+      }
+      html += '</div>';
+    }
+    bitDisplay.innerHTML = html;
+  }
+
+  function clearErrors() {
+    Object.values(fields).forEach(f => { f.err.textContent = ''; f.el.classList.remove('error'); });
+    customError.textContent = '';
+    customInput.classList.remove('error');
+  }
+
+  function updateFromValue(value, sourceKey) {
+    Object.entries(fields).forEach(([key, f]) => {
+      if (key === sourceKey) return;
+      if (value === null) { f.el.value = ''; return; }
+      f.el.value = bigIntToBase(value, f.base);
+    });
+    // Update custom base
+    if (sourceKey !== 'custom') {
+      if (value === null) { customInput.value = ''; }
+      else { customInput.value = bigIntToBase(value, parseInt(customBase.value)); }
+    }
+    updateBitDisplay(value);
+  }
+
+  // Attach live input handlers for standard fields
+  Object.entries(fields).forEach(([key, f]) => {
+    f.el.addEventListener('input', function() {
+      clearErrors();
+      const raw = f.el.value.trim();
+      const result = validateInput(raw, f.base);
+      if (!result.valid) {
+        f.err.textContent = result.error;
+        f.el.classList.add('error');
+        return;
+      }
+      updateFromValue(result.value, key);
+    });
+  });
+
+  // Custom base input handler
+  customInput.addEventListener('input', function() {
+    clearErrors();
+    const base = parseInt(customBase.value);
+    const raw = customInput.value.trim();
+    const result = validateInput(raw, base);
+    if (!result.valid) {
+      customError.textContent = result.error;
+      customInput.classList.add('error');
+      return;
+    }
+    updateFromValue(result.value, 'custom');
+  });
+
+  // When base selector changes, re-convert from current decimal value
+  customBase.addEventListener('change', function() {
+    clearErrors();
+    const decVal = fields.dec.el.value.trim();
+    if (!decVal) { customInput.value = ''; return; }
+    const result = validateInput(decVal, 10);
+    if (result.valid && result.value !== null) {
+      customInput.value = bigIntToBase(result.value, parseInt(customBase.value));
+    }
+  });
+})();
+
+function copyField(id) {
+  const el = document.getElementById(id);
+  if (!el || !el.value) return;
+  navigator.clipboard.writeText(el.value).then(() => {
+    const btn = event.currentTarget;
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = orig, 1000);
+  });
+}
+</script>
+<script data-goatcounter="https://devtoolbox.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

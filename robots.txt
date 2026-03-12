@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zcag.github.io/devtoolbox/sitemap.xml
